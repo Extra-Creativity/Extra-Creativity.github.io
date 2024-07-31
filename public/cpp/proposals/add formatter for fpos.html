@@ -1562,7 +1562,7 @@ Possible extra rowspan handling
     blockquote c-[il] { color: inherit; } /* Literal.Number.Integer.Long */
   </style>
   <meta content="Bikeshed version c3a8ac783, updated Wed Jul 24 12:20:06 2024 -0700" name="generator">
-  <link href="https://wg21.link/" rel="canonical">
+  <link href="https://extra-creativity.github.io/public/cpp/proposals/add%20formatter%20for%20fpos.html" rel="canonical">
   <link href="https://isocpp.org/favicon.ico" rel="icon">
   <meta content="dark light" name="color-scheme">
 <style>
@@ -2108,6 +2108,8 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
    <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Published Proposal, <time class="dt-updated" datetime="2024-08-01">2024-08-01</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
+     <dt>This version:
+     <dd><a class="u-url" href="https://extra-creativity.github.io/public/cpp/proposals/add%20formatter%20for%20fpos.html">https://extra-creativity.github.io/public/cpp/proposals/add%20formatter%20for%20fpos.html</a>
      <dt class="editor">Author:
      <dd class="editor p-author h-card vcard"><a class="p-name fn u-email email" href="mailto:liangjiaming@stu.pku.edu.cn">Liang Jiaming</a> (<a class="p-org org" href="https://www.pku.edu.cn/">Peking University</a>)
      <dt>Audience:
@@ -2147,7 +2149,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   </nav>
   <main>
    <h2 class="heading settled" data-level="1" id="Intro"><span class="secno">1. </span><span class="content">Introduction</span><a class="self-link" href="#Intro"></a></h2>
-   <p>Stream-based I/O is designed since C++98 to give a thorough abstraction to I/O. An important method, like for <code class="highlight"><c- n>fstream</c-></code> and <code class="highlight"><c- n>stringstream</c-></code>, is to tell and seek the current position. Such position is most commonly conveyed by <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>char_traits</c-><c- o>&lt;</c-><c- n>T</c-><c- o>>::</c-><c- n>pos_type</c-></code>, which is <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-><c- o>&lt;</c-><c- n>std</c-><c- o>::</c-><c- n>char_traits</c-><c- o>&lt;</c-><c- n>T</c-><c- o>>::</c-><c- n>state_type</c-><c- o>></c-></code> by default and it’s widely implemented to be able to output by stream <code class="highlight"><c- k>operator</c-><c- o>&lt;&lt;</c-></code>. However, it cannot be output directly by <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>print</c-></code> in C++23 astonishingly due to lack of <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>formatter</c-></code>. This paper aims to add a specialization for it.</p>
+   <p>Stream-based I/O is designed since C++98 to give a thorough abstraction to I/O. An important part of the abstraction is position indicator, which is used to tell and seek the current position. Such position is most commonly conveyed by <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>char_traits</c-><c- o>&lt;</c-><c- n>T</c-><c- o>>::</c-><c- n>pos_type</c-></code>; it’s <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-><c- o>&lt;</c-><c- n>std</c-><c- o>::</c-><c- n>char_traits</c-><c- o>&lt;</c-><c- n>T</c-><c- o>>::</c-><c- n>state_type</c-><c- o>></c-></code> by default and widely implemented to be able to output by stream <code class="highlight"><c- k>operator</c-><c- o>&lt;&lt;</c-></code>. However, it cannot be output directly by <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>print</c-></code> in C++23 astonishingly due to lack of <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>formatter</c-></code>. This paper aims to add a specialization for it.</p>
    <h2 class="heading settled" data-level="2" id="Motivation"><span class="secno">2. </span><span class="content">Motivation</span><a class="self-link" href="#Motivation"></a></h2>
    <p>Let’s see tony table to illustrate it directly:</p>
    <table>
@@ -2157,19 +2159,19 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
      <tr>
       <td valign="top">
 <pre class="highlight" lang="cpp"><c- n>std</c-><c- o>::</c-><c- n>stringstream</c-> <c- n>s</c-><c- p>{</c-><c- s>"ABC"</c-><c- p>};</c->
-<c- n>std</c-><c- o>::</c-><c- n>cout</c-> <c- o>&lt;&lt;</c-> <c- n>s</c-><c- p>.</c-><c- n>tellg</c-><c- p>();</c->        <c- c1>// Yes on almost all implementations</c->
-<c- n>std</c-><c- o>::</c-><c- n>println</c-><c- p>(</c-><c- s>"{}"</c-><c- p>,</c-> <c- n>s</c-><c- p>.</c-><c- n>tellg</c-><c- p>());</c-> <c- c1>// Compile error...</c->
+<c- n>std</c-><c- o>::</c-><c- n>cout</c-> <c- o>&lt;&lt;</c-> <c- n>s</c-><c- p>.</c-><c- n>tellg</c-><c- p>();</c->        <c- c1>// ✅Yes on almost all implementations</c->
+<c- n>std</c-><c- o>::</c-><c- n>println</c-><c- p>(</c-><c- s>"{}"</c-><c- p>,</c-> <c- n>s</c-><c- p>.</c-><c- n>tellg</c-><c- p>());</c-> <c- c1>// ❌Compile error...</c->
 <c- c1>// To make it work, we have to write...</c->
-<c- n>std</c-><c- o>::</c-><c- n>println</c-><c- p>(</c-><c- s>"{}"</c-><c- p>,</c-> <c- p>(</c-><c- n>std</c-><c- o>::</c-><c- n>streamoff</c-><c- p>)</c-><c- n>s</c-><c- p>.</c-><c- n>tellg</c-><c- p>());</c->    <c- c1>// What?</c->
-<c- n>std</c-><c- o>::</c-><c- n>println</c-><c- p>(</c-><c- s>"{}"</c-><c- p>,</c-> <c- n>s</c-><c- p>.</c-><c- n>tellg</c-><c- p>()</c-> <c- o>-</c-> <c- n>std</c-><c- o>::</c-><c- n>streampos</c-><c- p>{});</c-> <c- c1>// No way...</c->
+<c- n>std</c-><c- o>::</c-><c- n>println</c-><c- p>(</c-><c- s>"{}"</c-><c- p>,</c-> <c- p>(</c-><c- n>std</c-><c- o>::</c-><c- n>streamoff</c-><c- p>)</c-><c- n>s</c-><c- p>.</c-><c- n>tellg</c-><c- p>());</c->    <c- c1>// 😢What?</c->
+<c- n>std</c-><c- o>::</c-><c- n>println</c-><c- p>(</c-><c- s>"{}"</c-><c- p>,</c-> <c- n>s</c-><c- p>.</c-><c- n>tellg</c-><c- p>()</c-> <c- o>-</c-> <c- n>std</c-><c- o>::</c-><c- n>streampos</c-><c- p>{});</c-> <c- c1>// 😢No way...</c->
 </pre>
      <tr>
       <th> After 
      <tr>
       <td valign="top">
 <pre class="highlight" lang="cpp"><c- n>std</c-><c- o>::</c-><c- n>stringstream</c-> <c- n>s</c-><c- p>{</c-><c- s>"ABC"</c-><c- p>};</c->
-<c- n>std</c-><c- o>::</c-><c- n>cout</c-> <c- o>&lt;&lt;</c-> <c- n>s</c-><c- p>.</c-><c- n>tellg</c-><c- p>();</c->        <c- c1>// Yes on almost all implementations</c->
-<c- n>std</c-><c- o>::</c-><c- n>println</c-><c- p>(</c-><c- s>"{}"</c-><c- p>,</c-> <c- n>s</c-><c- p>.</c-><c- n>tellg</c-><c- p>());</c-> <c- c1>// Yes!</c->
+<c- n>std</c-><c- o>::</c-><c- n>cout</c-> <c- o>&lt;&lt;</c-> <c- n>s</c-><c- p>.</c-><c- n>tellg</c-><c- p>();</c->        <c- c1>// ✅Yes on almost all implementations</c->
+<c- n>std</c-><c- o>::</c-><c- n>println</c-><c- p>(</c-><c- s>"{}"</c-><c- p>,</c-> <c- n>s</c-><c- p>.</c-><c- n>tellg</c-><c- p>());</c-> <c- c1>// ✅Yes!</c->
 </pre>
    </table>
    <h2 class="heading settled" data-level="3" id="Design"><span class="secno">3. </span><span class="content">Design Decision</span><a class="self-link" href="#Design"></a></h2>
@@ -2191,7 +2193,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
 <c- k>using</c-> <c- n>fstream</c-> <c- o>=</c-> <c- n>basic_iostream</c-><c- o>&lt;</c-><c- b>char</c-><c- o>></c-><c- p>;</c->
 <c- k>using</c-> <c- n>wfstream</c-> <c- o>=</c-> <c- n>basic_iostream</c-><c- o>&lt;</c-><c- b>wchar_t</c-><c- o>></c-><c- p>;</c->
 </pre>
-   <p>So the return type of <code class="highlight"><c- n>tellg</c-><c- o>/</c-><c- n>p</c-></code> is determined by <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>char_traits</c-><c- o>&lt;</c-><c- n>CharT</c-><c- o>>::</c-><c- n>pos_type</c-></code>, which is defined as <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-><c- o>&lt;</c-><c- n>std</c-><c- o>::</c-><c- n>char_traits</c-><c- o>&lt;</c-><c- n>T</c-><c- o>>::</c-><c- n>state_type</c-><c- o>></c-></code>. It’s a class that only supports limited integer operations, like subtracting another <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code> to get <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>streamoff</c-></code>, or add a <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>streamoff</c-></code> offset to get a new <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code>. Particularly, std::streamoff is regulated to be an alias of a signed integer type, and <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code> should be able to be converted to <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>streamoff</c-></code> to make expression <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>streamoff</c-><c- p>(</c-><c- n>pos</c-><c- p>)</c-></code> compile (See <a href="https://eel.is/c++draft/stream.types">stream.types</a> and <a href="https://eel.is/c++draft/fpos.operations">fpos.operations</a> in the standard).</p>
+   <p>So the return type of <code class="highlight"><c- n>tellg</c-><c- o>/</c-><c- n>p</c-></code> is usually determined by <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>char_traits</c-><c- o>&lt;</c-><c- n>CharT</c-><c- o>>::</c-><c- n>pos_type</c-></code>, where <code class="highlight"><c- n>CharT</c-></code> is <code class="highlight"><c- b>char</c-></code> or <code class="highlight"><c- b>wchar_t</c-></code>. They’re defined as <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-><c- o>&lt;</c-><c- n>std</c-><c- o>::</c-><c- n>char_traits</c-><c- o>&lt;</c-><c- n>CharT</c-><c- o>>::</c-><c- n>state_type</c-><c- o>></c-></code>. It’s a class that only supports limited integer operations, like subtracting another <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code> to get <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>streamoff</c-></code>, or adding a <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>streamoff</c-></code> offset to get a new <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code>. Particularly, <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>streamoff</c-></code> is regulated to be an alias of a signed integer type, and <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code> should be able to be converted to <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>streamoff</c-></code> to make expression <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>streamoff</c-><c- p>(</c-><c- n>pos</c-><c- p>)</c-></code> compile (See <a href="https://eel.is/c++draft/stream.types">[stream.types]</a> and <a href="https://eel.is/c++draft/fpos.operations">[fpos.operations]</a> in the standard).</p>
    <p>Though such requirement can be implemented as follows:</p>
 <pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>typename</c-> <c- nc>T</c-><c- o>></c->
 <c- k>class</c-> <c- nc>fpos</c->
@@ -2212,7 +2214,7 @@ all choose to make it not <code class="highlight"><c- k>explicit</c-></code>. Su
 <c- k>requires</c-> <c- n>std</c-><c- o>::</c-><c- n>is_convertible_v</c-><c- o>&lt;</c-><c- n>T</c-><c- p>,</c-> <c- n>U</c-><c- o>></c->
 <c- k>struct</c-> <c- nc>std</c-><c- o>::</c-><c- n>borrow_formatter</c-><c- o>:</c-> <c- n>std</c-><c- o>::</c-><c- n>formatter</c-><c- o>&lt;</c-><c- n>U</c-><c- p>,</c-> <c- n>CharT</c-><c- o>></c->
 <c- p>{</c->
-    <c- k>auto</c-> <c- n>format</c-><c- p>(</c-><c- k>const</c-> <c- n>T</c-><c- o>&amp;</c-> <c- n>value</c-><c- p>,</c-> <c- k>auto</c-><c- o>&amp;</c-> <c- n>context</c-><c- p>)</c->
+    <c- k>auto</c-> <c- n>format</c-><c- p>(</c-><c- k>const</c-> <c- n>T</c-><c- o>&amp;</c-> <c- n>value</c-><c- p>,</c-> <c- k>auto</c-><c- o>&amp;</c-> <c- n>context</c-><c- p>)</c-> <c- k>const</c->
     <c- p>{</c->
         <c- k>return</c-> <c- n>std</c-><c- o>::</c-><c- n>formatter</c-><c- o>&lt;</c-><c- n>U</c-><c- p>,</c-> <c- n>CharT</c-><c- o>>::</c-><c- n>format</c-><c- p>(</c-><c- k>static_cast</c-><c- o>&lt;</c-><c- n>U</c-><c- o>></c-><c- p>(</c-><c- n>value</c-><c- p>),</c-> <c- n>context</c-><c- p>);</c->
     <c- p>}</c->
@@ -2234,13 +2236,13 @@ all choose to make it not <code class="highlight"><c- k>explicit</c-></code>. Su
    </ol>
    <h2 class="heading settled" data-level="4" id="Wording"><span class="secno">4. </span><span class="content">Proposal and Wording</span><a class="self-link" href="#Wording"></a></h2>
    <p>We propose to add a <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>formatter</c-></code> specialization for <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code> to make it same as the result when it’s converted to <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>streamoff</c-></code>.</p>
-   <p>For the wording, we propose to add a new line in <a href="https://eel.is/c++draft/fpos.operations">fpos.operations</a>:</p>
+   <p>For the wording, we propose to add a new line in <a href="https://eel.is/c++draft/fpos.operations">[fpos.operations]</a>:</p>
    <blockquote>
     <p>2.Stream operations that return a value of type traits​::​pos_type return P(O(-1)) as an invalid value to signal an error. If this value is used as an argument to any istream, ostream, or streambuf member that accepts a value of type traits​::​pos_type then the behavior of that function is undefined.<br></p>
     <ins>3. formatter&lt;P> should has the same behavior as formatter&lt;O>.</ins>
    </blockquote>
    <h2 class="heading settled" data-level="5" id="Impact"><span class="secno">5. </span><span class="content">Impact on Existing Code</span><a class="self-link" href="#Impact"></a></h2>
-   <p>This is a pure extension to the library so there won’t be severe conflicts with the existing code. The only possible conflict is that some existing code has already add specialization on <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code>, but it seems that almost no open-source code on Github does so.</p>
+   <p>This is a pure extension to the library so there won’t be severe conflicts with the existing code. The only possible conflict is that some existing code has already add specialization on <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code>, but it seems that no open-source code on Github does so.</p>
    <h2 class="heading settled" data-level="6" id="Implementation"><span class="secno">6. </span><span class="content">Implementation</span><a class="self-link" href="#Implementation"></a></h2>
    <p>The easiest implementation may make use of inheritance:</p>
 <pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>typename</c-> <c- nc>T</c-><c- p>,</c-> <c- k>typename</c-> <c- nc>CharT</c-><c- o>></c->
@@ -2280,7 +2282,7 @@ all choose to make it not <code class="highlight"><c- k>explicit</c-></code>. Su
     <c- n>__format</c-><c- o>::</c-><c- n>__formatter_int</c-><c- o>&lt;</c-><c- n>_CharT</c-><c- o>></c-> <c- n>_M_f</c-><c- p>;</c->
   <c- p>};</c->
 </pre>
-   <p>Which checks <code class="highlight"><c- n>integral</c-></code> at the class template concepts and thus the explicit template parameter <code class="highlight"><c- n>streamoff</c-></code> satisfies it. Then in <code class="highlight"><c- n>format</c-></code> method, <code class="highlight"><c- n>_Tp</c-></code> is used directly so implicit conversion works.</p>
+   <p>which checks <code class="highlight"><c- n>integral</c-></code> at the class template concepts and thus the explicit template parameter <code class="highlight"><c- n>streamoff</c-></code> satisfies it. Then in <code class="highlight"><c- n>format</c-></code> method, <code class="highlight"><c- n>_Tp</c-></code> is used directly so implicit conversion works.</p>
    <p>Though it’s highly likely that compilers can optimize it to be same as re-implementing <code class="highlight"><c- n>formatter</c-></code> for <code class="highlight"><c- n>fpos</c-></code>, we suggests the implementation to checking it further.</p>
    <h2 class="heading settled" data-level="7" id="Acknowledgement"><span class="secno">7. </span><span class="content">Acknowledgement</span><a class="self-link" href="#Acknowledgement"></a></h2>
    <p>Thanks to Victor Zverovich, the author of <a data-link-type="biblio" href="#biblio-fmt" title="The {fmt} library">[fmt]</a>, and Arthur O’Dwyer for suggestions on generalization of the conversion and encouragement to post this paper. I’d also like to extend my gratitude to Peking University for giving me a colorful undergraduate life in the last four years.</p>
