@@ -2135,6 +2135,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
      <ol class="toc">
       <li><a href="#Problem"><span class="secno">3.1</span> <span class="content">Core Problem</span></a>
       <li><a href="#Another_way"><span class="secno">3.2</span> <span class="content">Why not Generalize Formatter to Allow Conversion</span></a>
+      <li><a href="#Evolution"><span class="secno">3.3</span> <span class="content">Possible Future Evolution</span></a>
      </ol>
     <li><a href="#Wording"><span class="secno">4</span> <span class="content">Proposal and Wording</span></a>
     <li><a href="#Impact"><span class="secno">5</span> <span class="content">Impact on Existing Code</span></a>
@@ -2232,14 +2233,53 @@ all choose to make it not <code class="highlight"><c- k>explicit</c-></code>. Su
     <li data-md>
      <p>It’s relatively larger compared with only adding formatter for <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code>, which is unlikely to be quickly accepted for C++26 and delays the real purpose of this paper.</p>
     <li data-md>
-     <p>A similar proposal, <a data-link-type="biblio" href="#biblio-p3070" title="Formatting enums">[P3070]</a>, has been proposed by the author of <a data-link-type="biblio" href="#biblio-fmt" title="The {fmt} library">[fmt]</a>. Though <a data-link-type="biblio" href="#biblio-p3070" title="Formatting enums">[P3070]</a> only targets at supporting format for <code class="highlight"><c- k>enum</c-></code>, the approach it adopts can be extended further to support any conversions, even not conveyed by <code class="highlight"><c- k>operator</c-> <c- n>T</c-></code>. It’s also claimed that it could be faster than inheritance-based way in some situations.</p>
+     <p>A similar proposal, <a data-link-type="biblio" href="#biblio-p3070" title="Formatting enums">[P3070]</a>, has been proposed by the author of <a data-link-type="biblio" href="#biblio-fmt" title="The {fmt} library">[fmt]</a>. Though <a data-link-type="biblio" href="#biblio-p3070" title="Formatting enums">[P3070]</a> only targets at supporting format for <code class="highlight"><c- k>enum</c-></code>, the approach it adopts can be extended further to support any conversions, even not conveyed by <code class="highlight"><c- k>operator</c-> <c- n>T</c-></code>.</p>
+   </ol>
+   <h3 class="heading settled" data-level="3.3" id="Evolution"><span class="secno">3.3. </span><span class="content">Possible Future Evolution</span><a class="self-link" href="#Evolution"></a></h3>
+   <p>As we’ve stated, <a data-link-type="biblio" href="#biblio-p3070" title="Formatting enums">[P3070]</a> introduces a new way to customize formatting though it’s only for <code class="highlight"><c- k>enum</c-></code> currently. In <a data-link-type="biblio" href="#biblio-fmt" title="The {fmt} library">[fmt]</a> 10.0.0 (2023/5/10), it’s already made to support all user-defined types, and thus it can be implemented as:</p>
+<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>typename</c-> <c- nc>T</c-><c- o>></c->
+<c- k>auto</c-> <c- n>format_as</c-><c- p>(</c-><c- k>const</c-> <c- n>fpos</c-><c- o>&lt;</c-><c- n>T</c-><c- o>>&amp;</c-> <c- n>pos</c-><c- p>)</c-> <c- c1>// Or copy by value, depending on the efficiency for the specific platform.</c->
+<c- p>{</c->
+    <c- k>return</c-> <c- k>static_cast</c-><c- o>&lt;</c-><c- n>streamoff</c-><c- o>></c-><c- p>(</c-><c- n>pos</c-><c- p>);</c->
+<c- p>}</c->
+</pre>
+   <p>Though there isn’t runtime speed gain to adopt this way as we’ve tested on our machines, it could potentially reduce binary code size. And the reason why we still use specialization is that:</p>
+   <ol>
+    <li data-md>
+     <p>Adding format support for <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code> is more like "bug fix" for <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>print</c-></code> instead of a big feature request. But <a data-link-type="biblio" href="#biblio-p3070" title="Formatting enums">[P3070]</a> points out that only after receiving enough user experience will there be a new proposal to make it feasible for all user-defined types; so it’s possibly too late to wait for a not-even-written proposal to add format support for <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code> and delays it to C++29.</p>
+    <li data-md>
+     <p>There exists formatter specialization for <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>vector</c-><c- o>&lt;</c-><c- b>bool</c-><c- o>>::</c-><c- n>reference</c-></code>, which is regulated to behave same as formatter of <code class="highlight"><c- b>bool</c-></code>, and thus <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code> isn’t the first try to do specialization for such conversion. When the future extension of <a data-link-type="biblio" href="#biblio-p3070" title="Formatting enums">[P3070]</a> is proposed, properly designed and eventually accepted, we could post a new proposal to revise them together by adding <code class="highlight"><c- n>format_as</c-></code> for them.</p>
    </ol>
    <h2 class="heading settled" data-level="4" id="Wording"><span class="secno">4. </span><span class="content">Proposal and Wording</span><a class="self-link" href="#Wording"></a></h2>
    <p>We propose to add a <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>formatter</c-></code> specialization for <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code> to make it same as the result when it’s converted to <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>streamoff</c-></code>.</p>
    <p>For the wording, we propose to add a new line in <a href="https://eel.is/c++draft/fpos.operations">[fpos.operations]</a>:</p>
    <blockquote>
-    <p>2.Stream operations that return a value of type traits​::​pos_type return P(O(-1)) as an invalid value to signal an error. If this value is used as an argument to any istream, ostream, or streambuf member that accepts a value of type traits​::​pos_type then the behavior of that function is undefined.<br></p>
-    <ins>3. formatter&lt;P> should has the same behavior as formatter&lt;O>.</ins>
+     2.Stream operations that return a value of type traits​::​pos_type return P(O(-1)) as an invalid value to signal an error. If this value is used as an argument to any istream, ostream, or streambuf member that accepts a value of type traits​::​pos_type then the behavior of that function is undefined.<br> 
+    <ins>3. The formatter of fpos should behave same as follows:</ins>
+<pre class="highlight" lang="cpp" style="background-color: #CCFFCC;"><c- k>namespace</c-> <c- nn>std</c-> <c- p>{</c->
+ <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>T</c-><c- p>,</c-> <c- k>class</c-> <c- nc>charT</c-><c- o>></c->
+ <c- k>struct</c-> <c- nc>formatter</c-><c- o>&lt;</c-><c- n>fpos</c-><c- o>&lt;</c-><c- n>T</c-><c- o>>></c-> <c- p>{</c->
+ <c- k>private</c-><c- o>:</c->
+  <c- n>formatter</c-><c- o>&lt;</c-><c- n>streamoff</c-><c- p>,</c-> <c- n>charT</c-><c- o>></c-> <c- n>underlying_</c-><c- p>;</c->    <c- c1>// exposition only</c->    <br>
+ <c- k>public</c-><c- o>:</c->
+  <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>ParseContext</c-><c- o>></c->
+   <c- k>constexpr</c-> <c- k>typename</c-> <c- nc>ParseContext</c-><c- o>::</c-><c- n>iterator</c->
+    <c- n>parse</c-><c- p>(</c-><c- n>ParseContext</c-><c- o>&amp;</c-> <c- n>ctx</c-><c- p>);</c->    <br>
+  <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>FormatContext</c-><c- o>></c->
+   <c- k>typename</c-> <c- nc>FormatContext</c-><c- o>::</c-><c- n>iterator</c->
+    <c- n>format</c-><c- p>(</c-><c- k>const</c-> <c- n>fpos</c-><c- o>&lt;</c-><c- n>T</c-><c- o>>&amp;</c-> <c- n>ref</c-><c- p>,</c-> <c- n>FormatContext</c-><c- o>&amp;</c-> <c- n>ctx</c-><c- p>)</c-> <c- k>const</c-><c- p>;</c->
+ <c- p>};</c->
+<c- p>}</c->    <br>
+<c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>ParseContext</c-><c- o>></c->
+ <c- k>constexpr</c-> <c- k>typename</c-> <c- nc>ParseContext</c-><c- o>::</c-><c- n>iterator</c->
+  <c- n>parse</c-><c- p>(</c-><c- n>ParseContext</c-><c- o>&amp;</c-> <c- n>ctx</c-><c- p>);</c->
+</pre>
+    <ins>1.Equivalent to: return underlying_.parse(ctx);</ins>
+<pre class="highlight" lang="cpp" style="background-color: #CCFFCC;"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>FormatContext</c-><c- o>></c->
+ <c- k>typename</c-> <c- nc>FormatContext</c-><c- o>::</c-><c- n>iterator</c->
+  <c- n>format</c-><c- p>(</c-><c- k>const</c-> <c- n>fpos</c-><c- o>&lt;</c-><c- n>T</c-><c- o>>&amp;</c-> <c- n>ref</c-><c- p>,</c-> <c- n>FormatContext</c-><c- o>&amp;</c-> <c- n>ctx</c-><c- p>)</c-> <c- k>const</c-><c- p>;</c->
+</pre>
+    <ins>2.Equivalent to: return underlying_.format(ref, ctx);</ins>
    </blockquote>
    <h2 class="heading settled" data-level="5" id="Impact"><span class="secno">5. </span><span class="content">Impact on Existing Code</span><a class="self-link" href="#Impact"></a></h2>
    <p>This is a pure extension to the library so there won’t be severe conflicts with the existing code. The only possible conflict is that some existing code has already add specialization on <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code>, but it seems that no open-source code on Github does so.</p>
@@ -2285,7 +2325,7 @@ all choose to make it not <code class="highlight"><c- k>explicit</c-></code>. Su
    <p>which checks <code class="highlight"><c- n>integral</c-></code> at the class template concepts and thus the explicit template parameter <code class="highlight"><c- n>streamoff</c-></code> satisfies it. Then in <code class="highlight"><c- n>format</c-></code> method, <code class="highlight"><c- n>_Tp</c-></code> is used directly so implicit conversion works.</p>
    <p>Though it’s highly likely that compilers can optimize it to be same as re-implementing <code class="highlight"><c- n>formatter</c-></code> for <code class="highlight"><c- n>fpos</c-></code>, we suggests the implementation to checking it further.</p>
    <h2 class="heading settled" data-level="7" id="Acknowledgement"><span class="secno">7. </span><span class="content">Acknowledgement</span><a class="self-link" href="#Acknowledgement"></a></h2>
-   <p>Thanks to Victor Zverovich, the author of <a data-link-type="biblio" href="#biblio-fmt" title="The {fmt} library">[fmt]</a>, and Arthur O’Dwyer for suggestions on generalization of the conversion and encouragement to post this paper. I’d also like to extend my gratitude to Peking University for giving me a colorful undergraduate life in the last four years.</p>
+   <p>Thanks to Victor Zverovich, the author of <a data-link-type="biblio" href="#biblio-fmt" title="The {fmt} library">[fmt]</a>, and Arthur O’Dwyer for suggestions and discussions on generalization of the conversion and encouragement to post this paper. I’d also like to extend my gratitude to Peking University for giving me a colorful undergraduate life in the last four years.</p>
   </main>
 <script>
 (function() {
