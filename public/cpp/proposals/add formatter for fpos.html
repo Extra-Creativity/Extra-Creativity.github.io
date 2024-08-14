@@ -2,7 +2,7 @@
  <head>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-  <title>PXXXXR0: Adding formatter for fpos</title>
+  <title>D3374R0: Adding formatter for fpos&lt;mbstate_t></title>
 <style data-fill-with="stylesheet">/******************************************************************************
  *                   Style sheet for the W3C specifications                   *
  *
@@ -1581,6 +1581,22 @@ del {
   overflow-y: auto;
   clear: both;
 }
+li {
+	margin-top: 3pt;
+	margin-bottom: 3pt;
+}
+ul {
+    list-style-type: none;
+}
+ul > li:before {
+	content: "\2014";
+	position: absolute;
+	margin-left: -1.5em; 
+}
+div.itemdescr {
+	margin-left: 12mm;
+}
+span.texttt { font-family: 'Consolas'; }
 </style>
 <style>/* Boilerplate: style-autolinks */
 .css.css, .property.property, .descriptor.descriptor {
@@ -2104,8 +2120,8 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
  <body class="h-entry">
   <div class="head">
    <p data-fill-with="logo"></p>
-   <h1 class="p-name no-ref" id="title">PXXXXR0<br>Adding formatter for fpos</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Published Proposal, <time class="dt-updated" datetime="2024-08-01">2024-08-01</time></span></h2>
+   <h1 class="p-name no-ref" id="title">D3374R0<br>Adding formatter for fpos&lt;mbstate_t></h1>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Proposal, <time class="dt-updated" datetime="2024-08-01">2024-08-01</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -2123,7 +2139,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   </div>
   <div class="p-summary" data-fill-with="abstract">
    <h2 class="no-num no-toc no-ref heading settled" id="abstract"><span class="content">Abstract</span></h2>
-   <p>This paper aims to add formatter for <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code> used by position indicator APIs in stream.</p>
+   <p>This paper aims to add formatter for <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-><c- o>&lt;</c-><c- n>std</c-><c- o>::</c-><c- b>mbstate_t</c-><c- o>></c-></code> widely used by position indicator APIs in stream to make it convenient and robust to output.</p>
   </div>
   <nav data-fill-with="table-of-contents" id="toc">
    <h2 class="no-num no-toc no-ref" id="contents">Table of Contents</h2>
@@ -2133,11 +2149,16 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     <li>
      <a href="#Design"><span class="secno">3</span> <span class="content">Design Decision</span></a>
      <ol class="toc">
-      <li><a href="#Problem"><span class="secno">3.1</span> <span class="content">Core Problem</span></a>
-      <li><a href="#Another_way"><span class="secno">3.2</span> <span class="content">Why not Generalize Formatter to Allow Conversion</span></a>
+      <li>
+       <a href="#Problem"><span class="secno">3.1</span> <span class="content">Core Problem</span></a>
+       <ol class="toc">
+        <li><a href="#not-an-integer-only-convertible"><span class="secno">3.1.1</span> <span class="content">Not an integer, only convertible</span></a>
+        <li><a href="#not-only-the-integer-though-convertible"><span class="secno">3.1.2</span> <span class="content">Not only the integer, though convertible</span></a>
+       </ol>
+      <li><a href="#proposed-solution"><span class="secno">3.2</span> <span class="content">Proposed Solution</span></a>
       <li><a href="#Evolution"><span class="secno">3.3</span> <span class="content">Possible Future Evolution</span></a>
      </ol>
-    <li><a href="#Wording"><span class="secno">4</span> <span class="content">Proposal and Wording</span></a>
+    <li><a href="#Wording"><span class="secno">4</span> <span class="content">Standard Wording</span></a>
     <li><a href="#Impact"><span class="secno">5</span> <span class="content">Impact on Existing Code</span></a>
     <li><a href="#Implementation"><span class="secno">6</span> <span class="content">Implementation</span></a>
     <li><a href="#Acknowledgement"><span class="secno">7</span> <span class="content">Acknowledgement</span></a>
@@ -2150,7 +2171,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   </nav>
   <main>
    <h2 class="heading settled" data-level="1" id="Intro"><span class="secno">1. </span><span class="content">Introduction</span><a class="self-link" href="#Intro"></a></h2>
-   <p>Stream-based I/O is designed since C++98 to give a thorough abstraction to I/O. An important part of the abstraction is position indicator, which is used to tell and seek the current position. Such position is most commonly conveyed by <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>char_traits</c-><c- o>&lt;</c-><c- n>T</c-><c- o>>::</c-><c- n>pos_type</c-></code>; it’s <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-><c- o>&lt;</c-><c- n>std</c-><c- o>::</c-><c- n>char_traits</c-><c- o>&lt;</c-><c- n>T</c-><c- o>>::</c-><c- n>state_type</c-><c- o>></c-></code> by default and widely implemented to be able to output by stream <code class="highlight"><c- k>operator</c-><c- o>&lt;&lt;</c-></code>. However, it cannot be output directly by <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>print</c-></code> in C++23 astonishingly due to lack of <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>formatter</c-></code>. This paper aims to add a specialization for it.</p>
+   <p>Stream-based I/O is designed since C++98 to give a thorough abstraction to I/O. An important part of the abstraction is position indicator, which is used to tell and seek the current position. Such position is most commonly conveyed by <code class="highlight"><c- n>char_traits</c-><c- o>&lt;</c-><c- n>T</c-><c- o>>::</c-><c- n>pos_type</c-></code>, which is <code class="highlight"><c- n>fpos</c-><c- o>&lt;</c-><c- k>typename</c-> <c- nc>char_traits</c-><c- o>&lt;</c-><c- n>T</c-><c- o>>::</c-><c- n>state_type</c-><c- o>></c-></code> by default and the only instantiation used in the standard library is <code class="highlight"><c- n>fpos</c-><c- o>&lt;</c-><c- b>mbstate_t</c-><c- o>></c-></code>. It’s widely implemented to be able to be output by stream <code class="highlight"><c- k>operator</c-><c- o>&lt;&lt;</c-></code>; however, it cannot be output directly by <code class="highlight"><c- n>print</c-></code> in C++23 astonishingly due to lack of <code class="highlight"><c- n>formatter</c-></code>. Moreover, the state of the position is usually neglected, making it not robust in some cases to be output by <code class="highlight"><c- k>operator</c-><c- o>&lt;&lt;</c-></code>. This paper aims to add a specialization for <code class="highlight"><c- n>fpos</c-><c- o>&lt;</c-><c- b>mbstate_t</c-><c- o>></c-></code> to solve these problems.</p>
    <h2 class="heading settled" data-level="2" id="Motivation"><span class="secno">2. </span><span class="content">Motivation</span><a class="self-link" href="#Motivation"></a></h2>
    <p>Let’s see tony table to illustrate it directly:</p>
    <table>
@@ -2159,10 +2180,11 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
       <th> Before 
      <tr>
       <td valign="top">
-<pre class="highlight" lang="cpp"><c- n>std</c-><c- o>::</c-><c- n>stringstream</c-> <c- n>s</c-><c- p>{</c-><c- s>"ABC"</c-><c- p>};</c->
-<c- n>std</c-><c- o>::</c-><c- n>cout</c-> <c- o>&lt;&lt;</c-> <c- n>s</c-><c- p>.</c-><c- n>tellg</c-><c- p>();</c->        <c- c1>// ✅Yes on almost all implementations</c->
+<pre class="highlight" lang="cpp"><c- n>std</c-><c- o>::</c-><c- n>ofstream</c-> <c- n>s</c-><c- p>{</c-><c- s>"some_file"</c-><c- p>};</c->
+<c- c1>// Do some output...</c->
+<c- n>std</c-><c- o>::</c-><c- n>cout</c-> <c- o>&lt;&lt;</c-> <c- n>s</c-><c- p>.</c-><c- n>tellg</c-><c- p>();</c->        <c- c1>// ❓Yes on almost all implementations, but not robust</c->
 <c- n>std</c-><c- o>::</c-><c- n>println</c-><c- p>(</c-><c- s>"{}"</c-><c- p>,</c-> <c- n>s</c-><c- p>.</c-><c- n>tellg</c-><c- p>());</c-> <c- c1>// ❌Compile error...</c->
-<c- c1>// To make it work, we have to write...</c->
+<c- c1>// To make it work same as operator&lt;&lt;, we have to write...</c->
 <c- n>std</c-><c- o>::</c-><c- n>println</c-><c- p>(</c-><c- s>"{}"</c-><c- p>,</c-> <c- p>(</c-><c- n>std</c-><c- o>::</c-><c- n>streamoff</c-><c- p>)</c-><c- n>s</c-><c- p>.</c-><c- n>tellg</c-><c- p>());</c->    <c- c1>// 😢What?</c->
 <c- n>std</c-><c- o>::</c-><c- n>println</c-><c- p>(</c-><c- s>"{}"</c-><c- p>,</c-> <c- n>s</c-><c- p>.</c-><c- n>tellg</c-><c- p>()</c-> <c- o>-</c-> <c- n>std</c-><c- o>::</c-><c- n>streampos</c-><c- p>{});</c-> <c- c1>// 😢No way...</c->
 </pre>
@@ -2170,15 +2192,20 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
       <th> After 
      <tr>
       <td valign="top">
-<pre class="highlight" lang="cpp"><c- n>std</c-><c- o>::</c-><c- n>stringstream</c-> <c- n>s</c-><c- p>{</c-><c- s>"ABC"</c-><c- p>};</c->
-<c- n>std</c-><c- o>::</c-><c- n>cout</c-> <c- o>&lt;&lt;</c-> <c- n>s</c-><c- p>.</c-><c- n>tellg</c-><c- p>();</c->        <c- c1>// ✅Yes on almost all implementations</c->
-<c- n>std</c-><c- o>::</c-><c- n>println</c-><c- p>(</c-><c- s>"{}"</c-><c- p>,</c-> <c- n>s</c-><c- p>.</c-><c- n>tellg</c-><c- p>());</c-> <c- c1>// ✅Yes!</c->
+<pre class="highlight" lang="cpp"><c- n>std</c-><c- o>::</c-><c- n>ofstream</c-> <c- n>s</c-><c- p>{</c-><c- s>"some_file"</c-><c- p>};</c->
+<c- c1>// Do some output...</c->
+<c- n>std</c-><c- o>::</c-><c- n>cout</c-> <c- o>&lt;&lt;</c-> <c- n>s</c-><c- p>.</c-><c- n>tellg</c-><c- p>();</c->           <c- c1>// ❓Yes on almost all implementations, but not robust</c->
+<c- n>std</c-><c- o>::</c-><c- n>println</c-><c- p>(</c-><c- s>"{}"</c-><c- p>,</c-> <c- n>s</c-><c- p>.</c-><c- n>tellg</c-><c- p>());</c->    <c- c1>// ✅Yes and robust!</c->
+<c- n>std</c-><c- o>::</c-><c- n>println</c-><c- p>(</c-><c- s>"{:d}"</c-><c- p>,</c-> <c- n>s</c-><c- p>.</c-><c- n>tellg</c-><c- p>());</c->  <c- c1>// ✅Non-robust way can be controlled by users explicitly.</c->
+<c- n>std</c-><c- o>::</c-><c- n>stringstream</c-> <c- n>s2</c-><c- p>{</c-><c- s>"ABC"</c-><c- p>};</c->
+<c- n>std</c-><c- o>::</c-><c- n>println</c-><c- p>(</c-><c- s>"{:d}"</c-><c- p>,</c-> <c- n>s2</c-><c- p>.</c-><c- n>tellg</c-><c- p>());</c-> <c- c1>// ✅Especially for streams that don’t need codecvt.</c->
 </pre>
    </table>
    <h2 class="heading settled" data-level="3" id="Design"><span class="secno">3. </span><span class="content">Design Decision</span><a class="self-link" href="#Design"></a></h2>
    <h3 class="heading settled" data-level="3.1" id="Problem"><span class="secno">3.1. </span><span class="content">Core Problem</span><a class="self-link" href="#Problem"></a></h3>
+   <h4 class="heading settled" data-level="3.1.1" id="not-an-integer-only-convertible"><span class="secno">3.1.1. </span><span class="content">Not an integer, only convertible</span><a class="self-link" href="#not-an-integer-only-convertible"></a></h4>
    <p>For C programmers and those who don’t take a thorough look at the design of stream, they’re likely to regard the position as an integer directly since <code class="highlight"><c- n>ftell</c-></code> just returns so. Actually, in C++ it’s designed as follows:</p>
-<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>typename</c-> <c- nc>CharT</c-><c- p>,</c-> <c- k>typename</c-> <c- nc>CharTraits</c-> <c- o>=</c-> <c- n>std</c-><c- o>::</c-><c- n>char_traits</c-><c- o>&lt;</c-><c- n>CharT</c-><c- o>>></c->
+<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>typename</c-> <c- nc>CharT</c-><c- p>,</c-> <c- k>typename</c-> <c- nc>CharTraits</c-> <c- o>=</c-> <c- n>char_traits</c-><c- o>&lt;</c-><c- n>CharT</c-><c- o>>></c->
 <c- k>class</c-> <c- nc>basic_iostream</c->
 <c- p>{</c->
 <c- k>public</c-><c- o>:</c->
@@ -2188,79 +2215,52 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
 <c- p>};</c->
 </pre>
    <p>And the most commonly used types are alias like:</p>
-<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>typename</c-> <c- nc>CharT</c-><c- p>,</c-> <c- k>typename</c-> <c- nc>CharTraits</c-> <c- o>=</c-> <c- n>std</c-><c- o>::</c-><c- n>char_traits</c-><c- o>&lt;</c-><c- n>CharT</c-><c- o>>></c->
+<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>typename</c-> <c- nc>CharT</c-><c- p>,</c-> <c- k>typename</c-> <c- nc>CharTraits</c-> <c- o>=</c-> <c- n>char_traits</c-><c- o>&lt;</c-><c- n>CharT</c-><c- o>>></c->
 <c- k>class</c-> <c- nc>basic_fstream</c-> <c- o>:</c-> <c- k>public</c-> <c- n>basic_iostream</c-><c- o>&lt;</c-><c- n>CharT</c-><c- p>,</c-> <c- n>CharTraits</c-><c- o>></c-> <c- p>{</c-> <c- p>...</c-> <c- p>};</c->
 
 <c- k>using</c-> <c- n>fstream</c-> <c- o>=</c-> <c- n>basic_iostream</c-><c- o>&lt;</c-><c- b>char</c-><c- o>></c-><c- p>;</c->
 <c- k>using</c-> <c- n>wfstream</c-> <c- o>=</c-> <c- n>basic_iostream</c-><c- o>&lt;</c-><c- b>wchar_t</c-><c- o>></c-><c- p>;</c->
 </pre>
-   <p>So the return type of <code class="highlight"><c- n>tellg</c-><c- o>/</c-><c- n>p</c-></code> is usually determined by <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>char_traits</c-><c- o>&lt;</c-><c- n>CharT</c-><c- o>>::</c-><c- n>pos_type</c-></code>, where <code class="highlight"><c- n>CharT</c-></code> is <code class="highlight"><c- b>char</c-></code> or <code class="highlight"><c- b>wchar_t</c-></code>. They’re defined as <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-><c- o>&lt;</c-><c- n>std</c-><c- o>::</c-><c- n>char_traits</c-><c- o>&lt;</c-><c- n>CharT</c-><c- o>>::</c-><c- n>state_type</c-><c- o>></c-></code>. It’s a class that only supports limited integer operations, like subtracting another <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code> to get <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>streamoff</c-></code>, or adding a <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>streamoff</c-></code> offset to get a new <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code>. Particularly, <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>streamoff</c-></code> is regulated to be an alias of a signed integer type, and <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code> should be able to be converted to <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>streamoff</c-></code> to make expression <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>streamoff</c-><c- p>(</c-><c- n>pos</c-><c- p>)</c-></code> compile (See <a href="https://eel.is/c++draft/stream.types">[stream.types]</a> and <a href="https://eel.is/c++draft/fpos.operations">[fpos.operations]</a> in the standard).</p>
+   <p>So the return type of <code class="highlight"><c- n>tellg</c-><c- o>/</c-><c- n>p</c-></code> is usually determined by <code class="highlight"><c- n>char_traits</c-><c- o>&lt;</c-><c- n>CharT</c-><c- o>>::</c-><c- n>pos_type</c-></code>, where <code class="highlight"><c- n>CharT</c-></code> is <code class="highlight"><c- b>char</c-></code> or <code class="highlight"><c- b>wchar_t</c-></code>. They’re defined as <code class="highlight"><c- n>fpos</c-><c- o>&lt;</c-><c- k>typename</c-> <c- nc>char_traits</c-><c- o>&lt;</c-><c- n>CharT</c-><c- o>>::</c-><c- n>state_type</c-><c- o>></c-></code>, and the only used instantiation in the standard library is <code class="highlight"><c- n>fpos</c-><c- o>&lt;</c-><c- b>mbstate_t</c-><c- o>></c-></code>. <code class="highlight"><c- n>fpos</c-></code> only supports limited integer operations, like subtracting another <code class="highlight"><c- n>fpos</c-></code> to get <code class="highlight"><c- n>streamoff</c-></code>, or adding a <code class="highlight"><c- n>streamoff</c-></code> offset to get a new <code class="highlight"><c- n>fpos</c-></code>. Particularly, <code class="highlight"><c- n>streamoff</c-></code> is regulated to be an alias of a signed integer type, and <code class="highlight"><c- n>fpos</c-></code> should be convertible to <code class="highlight"><c- n>streamoff</c-></code> to make expression <code class="highlight"><c- n>streamoff</c-><c- p>(</c-><c- n>pos</c-><c- p>)</c-></code> compile (See <a href="https://eel.is/c++draft/stream.types">[stream.types]</a> and <a href="https://eel.is/c++draft/fpos.operations">[fpos.operations]</a> in the standard).</p>
    <p>Though such requirement can be implemented as follows:</p>
-<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>typename</c-> <c- nc>T</c-><c- o>></c->
+<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>typename</c-> <c- nc>StateT</c-><c- o>></c->
 <c- k>class</c-> <c- nc>fpos</c->
 <c- p>{</c->
     <c- k>explicit</c-> <c- k>operator</c-> <c- n>streamoff</c-><c- p>()</c-> <c- k>const</c-> <c- p>{</c-> <c- p>...</c-> <c- p>}</c->
 <c- p>};</c->
 </pre>
    <p>The existing mainstream implementations, like <a href="https://github.com/microsoft/STL/blob/184ce39eef53e7ec0ab6dd16027771a120eac62f/stl/inc/iosfwd#L64">MS-STL</a>, <a href="https://github.com/gcc-mirror/gcc/blob/a945c346f57ba40fc80c14ac59be0d43624e559d/libstdc%2B%2B-v3/include/bits/postypes.h#L113">libstdc++</a>, <a href="https://github.com/llvm/llvm-project/blob/9783f28cbb155e4a8d49c12e1c60ce14dcfaf0c7/libcxx/include/__ios/fpos.h#L31">libc++</a>, and many other implmentations that support C++98 like <a href="https://github.com/apache/stdcxx/blob/trunk/include/rw/_traits.h#L249">Apache stdcxx</a>, <a href="https://sourceforge.net/projects/stlport/files/STLport/STLport-5.2.1/">STLport (stlport/stl/char_traits#92)</a>, 
-all choose to make it not <code class="highlight"><c- k>explicit</c-></code>. Such tacit phenomenon make an illusion to almost all C++ programmers that "it’s just an integer". Specifically, for output, the <code class="highlight"><c- k>operator</c-><c- o>&lt;&lt;</c-></code> has all overloads like:</p>
+all choose to make it not <code class="highlight"><c- k>explicit</c-></code>. Such tacit phenomenon make an illusion to C++ programmers that "it’s just an integer". Specifically, for output, the <code class="highlight"><c- k>operator</c-><c- o>&lt;&lt;</c-></code> has all overloads like:</p>
 <pre class="highlight"><c- n>basic_ostream</c-><c- o>&amp;</c-> <c- k>operator</c-><c- o>&lt;&lt;</c-><c- p>(</c-><c- b>int</c-><c- p>);</c->
 <c- n>basic_ostream</c-><c- o>&amp;</c-> <c- k>operator</c-><c- o>&lt;&lt;</c-><c- p>(</c-><c- b>long</c-><c- p>);</c->
 <c- n>basic_ostream</c-><c- o>&amp;</c-> <c- k>operator</c-><c- o>&lt;&lt;</c-><c- p>(</c-><c- b>long</c-> <c- b>long</c-><c- p>);</c->
 </pre>
-   <p>This enables implicit conversion from <code class="highlight"><c- n>fpos</c-></code> to <code class="highlight"><c- n>streamoff</c-></code> to match one of the overloads and makes output successful. However, it fails to work when it comes to <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>format</c-></code>, since template doesn’t try to do conversions at all. The specialization of <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>formatter</c-><c- o>&lt;</c-><c- b>int</c-><c- o>></c-></code>, <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>formatter</c-><c- o>&lt;</c-><c- b>long</c-><c- o>></c-></code> or <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>formatter</c-><c- o>&lt;</c-><c- b>long</c-> <c- b>long</c-><c- o>></c-></code> cannot be utilized by <code class="highlight"><c- n>fpos</c-></code>.</p>
-   <h3 class="heading settled" data-level="3.2" id="Another_way"><span class="secno">3.2. </span><span class="content">Why not Generalize Formatter to Allow Conversion</span><a class="self-link" href="#Another_way"></a></h3>
-   <p>One way to completely solve it and all related problems is to provide an approach to allow such conversion. For example, we can define a <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>borrow_formatter</c-><c- o>&lt;</c-><c- n>T</c-><c- p>,</c-> <c- n>U</c-><c- o>></c-></code> like:</p>
-<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>typename</c-> <c- nc>T</c-><c- p>,</c-> <c- k>typename</c-> <c- nc>U</c-><c- p>,</c-> <c- k>typename</c-> <c- nc>CharT</c-> <c- o>=</c-> <c- b>char</c-><c- o>></c->
-<c- k>requires</c-> <c- n>std</c-><c- o>::</c-><c- n>is_convertible_v</c-><c- o>&lt;</c-><c- n>T</c-><c- p>,</c-> <c- n>U</c-><c- o>></c->
-<c- k>struct</c-> <c- nc>std</c-><c- o>::</c-><c- n>borrow_formatter</c-><c- o>:</c-> <c- n>std</c-><c- o>::</c-><c- n>formatter</c-><c- o>&lt;</c-><c- n>U</c-><c- p>,</c-> <c- n>CharT</c-><c- o>></c->
-<c- p>{</c->
-    <c- k>auto</c-> <c- n>format</c-><c- p>(</c-><c- k>const</c-> <c- n>T</c-><c- o>&amp;</c-> <c- n>value</c-><c- p>,</c-> <c- k>auto</c-><c- o>&amp;</c-> <c- n>context</c-><c- p>)</c-> <c- k>const</c->
-    <c- p>{</c->
-        <c- k>return</c-> <c- n>std</c-><c- o>::</c-><c- n>formatter</c-><c- o>&lt;</c-><c- n>U</c-><c- p>,</c-> <c- n>CharT</c-><c- o>>::</c-><c- n>format</c-><c- p>(</c-><c- k>static_cast</c-><c- o>&lt;</c-><c- n>U</c-><c- o>></c-><c- p>(</c-><c- n>value</c-><c- p>),</c-> <c- n>context</c-><c- p>);</c->
-    <c- p>}</c->
-<c- p>};</c->
-</pre>
-   <p>and then define:</p>
-<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>typename</c-> <c- nc>T</c-><c- o>></c->
-<c- k>struct</c-> <c- nc>std</c-><c- o>::</c-><c- n>formatter</c-><c- o>&lt;</c-><c- n>std</c-><c- o>::</c-><c- n>fpos</c-><c- o>&lt;</c-><c- n>T</c-><c- o>>>:</c-> <c- n>std</c-><c- o>::</c-><c- n>borrow_formatter</c-><c- o>&lt;</c-><c- n>std</c-><c- o>::</c-><c- n>fpos</c-><c- o>&lt;</c-><c- n>T</c-><c- o>></c-><c- p>,</c-> <c- n>std</c-><c- o>::</c-><c- n>streamoff</c-><c- o>></c->
-<c- p>{</c->
-<c- p>};</c->
-</pre>
-   <p>Or even further, we can utilize <a data-link-type="biblio" href="#biblio-p2996" title="Reflection for C++26">[P2996]</a> to use reflection to try to search the unique accessible and convertible type in its methods, so that such formatter can be determined automatically.</p>
-   <p>However, these generalizations are possibly not proper to be proposed in this paper because:</p>
-   <ol>
+   <p>This enables implicit conversion from <code class="highlight"><c- n>fpos</c-></code> to <code class="highlight"><c- n>streamoff</c-></code> to match one of the overloads and makes output successful. However, it fails to work when it comes to <code class="highlight"><c- n>format</c-></code>, since template doesn’t try to do implicit conversions in most cases. The <code class="highlight"><c- n>formatter</c-></code> specialization for <code class="highlight"><c- b>int</c-></code>, <code class="highlight"><c- b>long</c-></code> and <code class="highlight"><c- b>long</c-> <c- b>long</c-></code> cannot be utilized by <code class="highlight"><c- n>fpos</c-></code> without explicit conversion.</p>
+   <h4 class="heading settled" data-level="3.1.2" id="not-only-the-integer-though-convertible"><span class="secno">3.1.2. </span><span class="content">Not only the integer, though convertible</span><a class="self-link" href="#not-only-the-integer-though-convertible"></a></h4>
+   <p>Another problem that’s usually neglected is that <code class="highlight"><c- n>fpos</c-></code> doesn’t merely contain the position integer; it also has a <code class="highlight"><c- n>state</c-></code> as conveyed by the template parameter, most typically <code class="highlight"><c- b>mbstate_t</c-></code>. It’s used to determine the current state of character conversion, like for <code class="highlight"><c- n>codecvt</c-></code> in locale. By default, <code class="highlight"><c- n>fpos</c-></code> assigned by a <code class="highlight"><c- n>streamoff</c-></code> will have a value-initialized state, which means the initial state. However, sometimes it’s possibly not "initial", making such restoration unsafe and incorrect.</p>
+   <p>For instance, though rarely happen, if some derived class of <code class="highlight"><c- n>basic_streambuf</c-></code> allows partial conversion when overriding <code class="highlight"><c- n>overflow</c-></code> (since it’s only regulated to prepare space for at least one <code class="highlight"><c- n>CharT</c-></code>), <code class="highlight"><c- n>tellp</c-></code> of its stream may also report a <code class="highlight"><c- n>fpos</c-></code> with partial status. Anyway, it’s incomplete to only report the position integer in some cases.</p>
+   <h3 class="heading settled" data-level="3.2" id="proposed-solution"><span class="secno">3.2. </span><span class="content">Proposed Solution</span><a class="self-link" href="#proposed-solution"></a></h3>
+   <p>To make it both safe and convenient, we propose to add formatter specialization for <code class="highlight"><c- n>fpos</c-><c- o>&lt;</c-><c- b>mbstate_t</c-><c- o>></c-></code>. Considering that almost all behaviors of <code class="highlight"><c- b>mbstate_t</c-></code> are implementation-defined, it seems meaningless to regulate its format specifications. However, the state should be output in a way that can fully convey its information, so if <a data-link-type="biblio" href="#biblio-p1729" title="Text Parsing">[P1729]</a> is accepted, a corresponding scanner can be defined to do a round trip.</p>
+   <p>So to be specific, the formatter specialization of <code class="highlight"><c- n>fpos</c-><c- o>&lt;</c-><c- b>mbstate_t</c-><c- o>></c-></code> should behave as follows:</p>
+   <ul>
     <li data-md>
-     <p>It’s relatively larger compared with only adding formatter for <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code>, which is unlikely to be quickly accepted for C++26 and delays the real purpose of this paper.</p>
+     <p>When no specification is given (like <code class="highlight"><c- p>{}</c-></code> or <code class="highlight"><c- p>{</c-><c- o>:</c-><c- p>}</c-></code>), <code class="highlight"><c- n>format</c-></code> should produce <code class="highlight"><c- s>"(position, mbstate descriptor)"</c-></code>, where <code class="highlight"><c- n>mbstate</c-> <c- n>descriptor</c-></code> can be used to fully restore the state of <code class="highlight"><c- n>fpos</c-></code>;</p>
     <li data-md>
-     <p>A similar proposal, <a data-link-type="biblio" href="#biblio-p3070" title="Formatting enums">[P3070]</a>, has been proposed by the author of <a data-link-type="biblio" href="#biblio-fmt" title="The {fmt} library">[fmt]</a>. Though <a data-link-type="biblio" href="#biblio-p3070" title="Formatting enums">[P3070]</a> only targets at supporting format for <code class="highlight"><c- k>enum</c-></code>, the approach it adopts can be extended further to support any conversions, even not conveyed by <code class="highlight"><c- k>operator</c-> <c- n>T</c-></code>.</p>
-   </ol>
+     <p>When some specifications are given (e.g. <code class="highlight"><c- p>{</c-><c- o>:</c-><c- n>d</c-><c- p>}</c-></code>), only the position will be output in the way determined by the format specifications. The implementation is encouraged to check whether <code class="highlight"><c- b>mbstate_t</c-></code> is in its initial state by <code class="highlight"><c- n>mbsinit</c-></code>, like in debug mode.</p>
+   </ul>
    <h3 class="heading settled" data-level="3.3" id="Evolution"><span class="secno">3.3. </span><span class="content">Possible Future Evolution</span><a class="self-link" href="#Evolution"></a></h3>
-   <p>As we’ve stated, <a data-link-type="biblio" href="#biblio-p3070" title="Formatting enums">[P3070]</a> introduces a new way to customize formatting though it’s only for <code class="highlight"><c- k>enum</c-></code> currently. In <a data-link-type="biblio" href="#biblio-fmt" title="The {fmt} library">[fmt]</a> 10.0.0 (2023/5/10), it’s already made to support all user-defined types, and thus it can be implemented as:</p>
-<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>typename</c-> <c- nc>T</c-><c- o>></c->
-<c- k>auto</c-> <c- n>format_as</c-><c- p>(</c-><c- k>const</c-> <c- n>fpos</c-><c- o>&lt;</c-><c- n>T</c-><c- o>>&amp;</c-> <c- n>pos</c-><c- p>)</c-> <c- c1>// Or copy by value, depending on the efficiency for the specific platform.</c->
-<c- p>{</c->
-    <c- k>return</c-> <c- k>static_cast</c-><c- o>&lt;</c-><c- n>streamoff</c-><c- o>></c-><c- p>(</c-><c- n>pos</c-><c- p>);</c->
-<c- p>}</c->
-</pre>
-   <p>Though there isn’t runtime speed gain to adopt this way as we’ve tested on our machines, it could potentially reduce binary code size. And the reason why we still use specialization is that:</p>
-   <ol>
-    <li data-md>
-     <p>Adding format support for <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code> is more like "bug fix" for <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>print</c-></code> instead of a big feature request. But <a data-link-type="biblio" href="#biblio-p3070" title="Formatting enums">[P3070]</a> points out that only after receiving enough user experience will there be a new proposal to make it feasible for all user-defined types; so it’s possibly too late to wait for a not-even-written proposal to add format support for <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code> and delays it to C++29.</p>
-    <li data-md>
-     <p>There exists formatter specialization for <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>vector</c-><c- o>&lt;</c-><c- b>bool</c-><c- o>>::</c-><c- n>reference</c-></code>, which is regulated to behave same as formatter of <code class="highlight"><c- b>bool</c-></code>, and thus <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code> isn’t the first try to do specialization for such conversion. When the future extension of <a data-link-type="biblio" href="#biblio-p3070" title="Formatting enums">[P3070]</a> is proposed, properly designed and eventually accepted, we could post a new proposal to revise them together by adding <code class="highlight"><c- n>format_as</c-></code> for them.</p>
-   </ol>
-   <h2 class="heading settled" data-level="4" id="Wording"><span class="secno">4. </span><span class="content">Proposal and Wording</span><a class="self-link" href="#Wording"></a></h2>
-   <p>We propose to add a <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>formatter</c-></code> specialization for <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code> to make it same as the result when it’s converted to <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>streamoff</c-></code>.</p>
-   <p>For the wording, we propose to add a new line in <a href="https://eel.is/c++draft/fpos.operations">[fpos.operations]</a>:</p>
+   <p>It could be discussed whether the formatter should be generalized for <code class="highlight"><c- n>fpos</c-></code> to support any <code class="highlight"><c- n>StateT</c-></code> that is formattable, and whether <code class="highlight"><c- b>mbstate_t</c-></code> should support <code class="highlight"><c- n>formatter</c-></code> itself instead of relying on <code class="highlight"><c- n>fpos</c-><c- o>&lt;</c-><c- b>mbstate_t</c-><c- o>></c-></code>. It may be also worthy to discuss whether ambiguity is introduced when parsing <code class="highlight"><c- p>(</c-><c- n>position</c-><c- p>,</c-> <c- n>mbstate</c-> <c- n>descriptor</c-><c- p>)</c-></code> to restore the <code class="highlight"><c- n>fpos</c-><c- o>&lt;</c-><c- b>mbstate_t</c-><c- o>></c-></code> if the descriptor is not constrained at all.</p>
+   <h2 class="heading settled" data-level="4" id="Wording"><span class="secno">4. </span><span class="content">Standard Wording</span><a class="self-link" href="#Wording"></a></h2>
+   <p>We propose to add wording in <a href="https://eel.is/c++draft/fpos.operations">[fpos.operations]</a>:</p>
    <blockquote>
-     2.Stream operations that return a value of type traits​::​pos_type return P(O(-1)) as an invalid value to signal an error. If this value is used as an argument to any istream, ostream, or streambuf member that accepts a value of type traits​::​pos_type then the behavior of that function is undefined.<br> 
-    <ins>3. The formatter of fpos should behave same as follows:</ins>
+     2.Stream operations that return a value of type traits::pos_type return P(O(-1)) as an invalid value to signal an error. If this value is used as an argument to any istream, ostream, or streambuf member that accepts a value of type traits::pos_type then the behavior of that function is undefined.<br> 
+    <ins>3. Assuming that mbstate_t can be fully restored by a <code class="highlight"><c- n>basic_string</c-><c- o>&lt;</c-><c- n>charT</c-><c- o>></c-></code> called mbstate descriptor, the formatter of <code class="highlight"><c- n>fpos</c-><c- o>&lt;</c-><c- b>mbstate_t</c-><c- o>></c-></code> should behave as follows:</ins>
 <pre class="highlight" lang="cpp" style="background-color: #CCFFCC;"><c- k>namespace</c-> <c- nn>std</c-> <c- p>{</c->
- <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>T</c-><c- p>,</c-> <c- k>class</c-> <c- nc>charT</c-><c- o>></c->
- <c- k>struct</c-> <c- nc>formatter</c-><c- o>&lt;</c-><c- n>fpos</c-><c- o>&lt;</c-><c- n>T</c-><c- o>>></c-> <c- p>{</c->
+ <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>charT</c-><c- o>></c->
+ <c- k>struct</c-> <c- nc>formatter</c-><c- o>&lt;</c-><c- n>fpos</c-><c- o>&lt;</c-><c- b>mbstate_t</c-><c- o>></c-><c- p>,</c-> <c- n>charT</c-><c- o>></c-> <c- p>{</c->
  <c- k>private</c-><c- o>:</c->
   <c- n>formatter</c-><c- o>&lt;</c-><c- n>streamoff</c-><c- p>,</c-> <c- n>charT</c-><c- o>></c-> <c- n>underlying_</c-><c- p>;</c->    <c- c1>// exposition only</c->    <br>
+  <c- b>bool</c-> <c- n>need_state_</c-> <c- o>=</c-> false<c- p>;</c->     <c- c1>// exposition only</c->    <br>
  <c- k>public</c-><c- o>:</c->
   <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>ParseContext</c-><c- o>></c->
    <c- k>constexpr</c-> <c- k>typename</c-> <c- nc>ParseContext</c-><c- o>::</c-><c- n>iterator</c->
@@ -2274,58 +2274,75 @@ all choose to make it not <code class="highlight"><c- k>explicit</c-></code>. Su
  <c- k>constexpr</c-> <c- k>typename</c-> <c- nc>ParseContext</c-><c- o>::</c-><c- n>iterator</c->
   <c- n>parse</c-><c- p>(</c-><c- n>ParseContext</c-><c- o>&amp;</c-> <c- n>ctx</c-><c- p>);</c->
 </pre>
-    <ins>1.Equivalent to: return underlying_.parse(ctx);</ins>
+    <div style="background-color: #CCFFCC;">
+     <div class="itemdescr" style="background-color: #CCFFCC;"> <i>Effects:</i> Sets <span class="texttt">need_state_</span> to <span class="texttt">true</span> if <i>format-specifier</i> or <i>format-spec</i> ([format.string.general]) is not present, otherwise same as <span class="texttt">underlying_.format(ctx)</span>.<br> <i>Returns:</i> An iterator past the end of <i>format-spec</i>.<br> </div>
+      <br> 
+    </div>
 <pre class="highlight" lang="cpp" style="background-color: #CCFFCC;"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>FormatContext</c-><c- o>></c->
  <c- k>typename</c-> <c- nc>FormatContext</c-><c- o>::</c-><c- n>iterator</c->
-  <c- n>format</c-><c- p>(</c-><c- k>const</c-> <c- n>fpos</c-><c- o>&lt;</c-><c- n>T</c-><c- o>>&amp;</c-> <c- n>ref</c-><c- p>,</c-> <c- n>FormatContext</c-><c- o>&amp;</c-> <c- n>ctx</c-><c- p>)</c-> <c- k>const</c-><c- p>;</c->
+  <c- n>format</c-><c- p>(</c-><c- k>const</c-> <c- n>fpos</c-><c- o>&lt;</c-><c- b>mbstate_t</c-><c- o>>&amp;</c-> <c- n>ref</c-><c- p>,</c-> <c- n>FormatContext</c-><c- o>&amp;</c-> <c- n>ctx</c-><c- p>)</c-> <c- k>const</c-><c- p>;</c->
 </pre>
-    <ins>2.Equivalent to: return underlying_.format(ref, ctx);</ins>
+    <div style="background-color: #CCFFCC;">
+     <div class="itemdescr">
+       <i>Effects:</i> Writes the following into <span class="texttt">ctx.out()</span>: 
+      <ul>
+       <li>If <span class="texttt">need_state_</span> is <span class="texttt">false</span>, then as if <span class="texttt">underlying_.format(static_cast&lt;streamoff>(ref), ctx)</span>;
+       <li>
+        Otherwise, 
+        <ul>
+         <li><i>STATICALLY-WIDEN</i><span class="texttt">&lt;charT>("(")</span>,
+         <li>the result of writing <span class="texttt">static_cast&lt;streamoff>(ref)</span> via <span class="texttt">underlying_</span>,
+         <li><i>STATICALLY-WIDEN</i><span class="texttt">&lt;charT>(", ")</span>,
+         <li>the mbstate descriptor of <span class="texttt">ref.state()</span>,
+         <li><i>STATICALLY-WIDEN</i><span class="texttt">&lt;charT>(")")</span>.
+        </ul>
+      </ul>
+       <i>Returns:</i> An iterator past the end of the output range.<br> <i>Remarks:</i> When <span class="texttt">need_state_</span> is <span class="texttt">false</span>, it’s encouraged to check whether <span class="texttt">ref.state()</span> is in the initial state by <code class="highlight"><c- n>mbsinit</c-></code>, like in debug mode of the implementation. 
+     </div>
+    </div>
    </blockquote>
    <h2 class="heading settled" data-level="5" id="Impact"><span class="secno">5. </span><span class="content">Impact on Existing Code</span><a class="self-link" href="#Impact"></a></h2>
-   <p>This is a pure extension to the library so there won’t be severe conflicts with the existing code. The only possible conflict is that some existing code has already add specialization on <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>fpos</c-></code>, but it seems that no open-source code on Github does so.</p>
+   <p>This is a pure extension to the standard library so there won’t be severe conflicts with the existing code. The only possible conflict is that some existing code has already added specialization on <code class="highlight"><c- n>fpos</c-><c- o>&lt;</c-><c- b>mbstate_t</c-><c- o>></c-></code>, but it seems that no open-source code on Github does so.</p>
    <h2 class="heading settled" data-level="6" id="Implementation"><span class="secno">6. </span><span class="content">Implementation</span><a class="self-link" href="#Implementation"></a></h2>
-   <p>The easiest implementation may make use of inheritance:</p>
-<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>typename</c-> <c- nc>T</c-><c- p>,</c-> <c- k>typename</c-> <c- nc>CharT</c-><c- o>></c->
-<c- k>struct</c-> <c- nc>formatter</c-><c- o>&lt;</c-><c- n>fpos</c-><c- o>&lt;</c-><c- n>T</c-><c- o>></c-><c- p>,</c-> <c- n>CharT</c-><c- o>></c-> <c- o>:</c-> <c- n>formatter</c-><c- o>&lt;</c-><c- n>streamoff</c-><c- p>,</c-> <c- n>CharT</c-><c- o>></c-> <c- p>{};</c->
-</pre>
-   <p>This still utilizes the implicit conversion and works for MS-STL and libstdc++ (See <a href="https://godbolt.org/z/anbG3axTa">compiler explorer</a>). However, it doesn’t work for libc++, which needs code like:</p>
-<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>typename</c-> <c- nc>T</c-><c- p>,</c-> <c- k>typename</c-> <c- nc>CharT</c-><c- o>></c->
-<c- k>struct</c-> <c- nc>formatter</c-><c- o>&lt;</c-><c- n>fpos</c-><c- o>&lt;</c-><c- n>T</c-><c- o>></c-><c- p>,</c-> <c- n>CharT</c-><c- o>></c-> <c- o>:</c-> <c- n>formatter</c-><c- o>&lt;</c-><c- n>streamoff</c-><c- p>,</c-> <c- n>CharT</c-><c- o>></c->
+   <p>Since <code class="highlight"><c- b>mbstate_t</c-></code> is implementation-defined and the internal state is undocumented, we may only be able to write some pseudo-code that’s close to the final implementation. The easiest implementation may make use of inheritance:</p>
+<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>typename</c-> <c- nc>CharT</c-><c- o>></c->
+<c- k>struct</c-> <c- nc>formatter</c-><c- o>&lt;</c-><c- n>fpos</c-><c- o>&lt;</c-><c- b>mbstate_t</c-><c- o>></c-><c- p>,</c-> <c- n>CharT</c-><c- o>></c-> <c- o>:</c-> <c- n>formatter</c-><c- o>&lt;</c-><c- n>streamoff</c-><c- p>,</c-> <c- n>CharT</c-><c- o>></c->
 <c- p>{</c->
-    <c- k>auto</c-> <c- n>format</c-><c- p>(</c-><c- n>fpos</c-><c- o>&lt;</c-><c- n>T</c-><c- o>></c-> <c- n>value</c-><c- p>,</c-> <c- k>auto</c-><c- o>&amp;</c-> <c- n>context</c-><c- p>)</c-> <c- k>const</c->
+<c- k>private</c-><c- o>:</c->
+    <c- k>using</c-> <c- n>Base</c-> <c- o>=</c-> <c- n>formatter</c-><c- o>&lt;</c-><c- n>streamoff</c-><c- p>,</c-> <c- n>CharT</c-><c- o>></c-><c- p>;</c->
+    <c- b>bool</c-> <c- n>need_state_</c-> <c- o>=</c-> false<c- p>;</c->
+
+<c- k>public</c-><c- o>:</c->
+    <c- k>constexpr</c-> <c- k>auto</c-> <c- n>parse</c-><c- p>(</c-><c- k>const</c-> <c- k>auto</c-><c- o>&amp;</c-> <c- n>ctx</c-><c- p>)</c->
     <c- p>{</c->
-        <c- k>return</c-> <c- n>formatter</c-><c- o>&lt;</c-><c- n>streamoff</c-><c- o>>::</c-><c- n>format</c-><c- p>(</c-><c- k>static_cast</c-><c- o>&lt;</c-><c- n>streamoff</c-><c- o>></c-><c- p>(</c-><c- n>value</c-><c- p>),</c-> <c- n>context</c-><c- p>);</c->
+        <c- k>auto</c-> <c- n>it</c-> <c- o>=</c-> <c- n>ctx</c-><c- p>.</c-><c- n>begin</c-><c- p>();</c->
+        <c- k>if</c-> <c- p>(</c-><c- n>it</c-> <c- o>==</c-> <c- n>context</c-><c- p>.</c-><c- n>end</c-><c- p>()</c-> <c- o>||</c-> <c- o>*</c-><c- n>it</c-> <c- o>==</c-> <c- n>WIDEN</c-><c- p>(</c-><c- sc>'}'</c-><c- p>))</c->
+        <c- p>{</c->
+            <c- n>need_state_</c-> <c- o>=</c-> true<c- p>;</c->
+            <c- k>return</c-> <c- n>it</c-><c- p>;</c->
+        <c- p>}</c->
+
+        <c- k>return</c-> <c- n>Base</c-><c- o>::</c-><c- n>parse</c-><c- p>(</c-><c- n>ctx</c-><c- p>);</c->
+    <c- p>}</c->
+
+    <c- k>auto</c-> <c- n>format</c-><c- p>(</c-><c- k>const</c-> <c- n>fpos</c-><c- o>&lt;</c-><c- b>mbstate_t</c-><c- o>>&amp;</c-> <c- n>value</c-><c- p>,</c-> <c- k>auto</c-><c- o>&amp;</c-> <c- n>ctx</c-><c- p>)</c-> <c- k>const</c->
+    <c- p>{</c->
+        <c- k>if</c-> <c- p>(</c-><c- n>need_state_</c-><c- p>)</c-> <c- p>{</c->
+            <c- k>return</c-> <c- n>format_to</c-><c- p>(</c-><c- n>ctx</c-><c- p>.</c-><c- n>out</c-><c- p>(),</c-> <c- n>ctx</c-><c- p>.</c-><c- n>locale</c-><c- p>(),</c-> <c- n>WIDEN</c-><c- p>(</c-><c- s>"({}, {})"</c-><c- p>),</c->
+                             <c- k>static_cast</c-><c- o>&lt;</c-><c- n>streamoff</c-><c- o>></c-><c- p>(</c-><c- n>value</c-><c- p>),</c->
+                             <c- n>GET_MBSTATE_DESCRIPTOR</c-><c- p>(</c-><c- n>value</c-><c- p>.</c-><c- n>state</c-><c- p>()));</c->
+        <c- p>}</c->
+<c- cp>#if DEBUG_LEVEL > SOME_NUMBER</c->
+        <c- k>auto</c-> <c- n>currState</c-> <c- o>=</c-> <c- n>value</c-><c- p>.</c-><c- n>state</c-><c- p>();</c->
+        <c- n>ASSERT</c-><c- p>(</c-><c- n>mbsinit</c-><c- p>(</c-><c- o>&amp;</c-><c- n>currState</c-><c- p>));</c->
+<c- cp>#endif</c->
+        <c- k>return</c-> <c- n>Base</c-><c- o>::</c-><c- n>format</c-><c- p>(</c-><c- k>static_cast</c-><c- o>&lt;</c-><c- n>streamoff</c-><c- o>></c-><c- p>(</c-><c- n>value</c-><c- p>),</c-> <c- n>ctx</c-><c- p>);</c->
     <c- p>}</c->
 <c- p>};</c->
 </pre>
-   <p>The reason lies in the formatter implementation details. For libc++, it’s implemented as follows (see <a href="https://github.com/llvm/llvm-project/blob/beeb15b71650b46f39cb6b1917e8d05568978656/libcxx/include/__format/formatter_integer.h#L43">here</a>):</p>
-<pre class="highlight"><c- k>template</c-> <c- o>&lt;</c-><c- n>__fmt_char_type</c-> <c- n>_CharT</c-><c- o>></c->
-<c- k>struct</c-> <c- nc>_LIBCPP_TEMPLATE_VIS</c-> <c- n>__formatter_integer</c-> <c- p>{</c->
-<c- c1>// ...</c->
-  <c- k>template</c-> <c- o>&lt;</c-><c- n>integral</c-> <c- n>_Tp</c-><c- p>,</c-> <c- k>class</c-> <c- nc>_FormatContext</c-><c- o>></c->
-  <c- n>_LIBCPP_HIDE_FROM_ABI</c-> <c- k>typename</c-> <c- nc>_FormatContext</c-><c- o>::</c-><c- n>iterator</c-> <c- n>format</c-><c- p>(</c-><c- n>_Tp</c-> <c- n>__value</c-><c- p>,</c-> <c- n>_FormatContext</c-><c- o>&amp;</c-> <c- n>__ctx</c-><c- p>)</c-> <c- k>const</c->
-<c- c1>// ...</c->
-<c- p>};</c->
-</pre>
-   <p>which checks whether <code class="highlight"><c- n>value</c-></code> is integer in the template <code class="highlight"><c- n>format</c-></code> method and thus implicit conversion cannot help. But for libstdc++, it’s just like (see <a href="https://github.com/gcc-mirror/gcc/blob/5be55447e256302324f38f04316a437909ae5847/libstdc%2B%2B-v3/include/std/format#L2122">here</a>):</p>
-<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- n>integral</c-> <c- n>_Tp</c-><c- p>,</c-> <c- n>__format</c-><c- o>::</c-><c- n>__char</c-> <c- n>_CharT</c-><c- o>></c->
-  <c- k>requires</c-> <c- p>(</c-><c- o>!</c-><c- n>__is_one_of</c-><c- o>&lt;</c-><c- n>_Tp</c-><c- p>,</c-> <c- b>char</c-><c- p>,</c-> <c- b>wchar_t</c-><c- p>,</c-> <c- b>char16_t</c-><c- p>,</c-> <c- b>char32_t</c-><c- o>>::</c-><c- n>value</c-><c- p>)</c->
-  <c- k>struct</c-> <c- nc>formatter</c-><c- o>&lt;</c-><c- n>_Tp</c-><c- p>,</c-> <c- n>_CharT</c-><c- o>></c->
-  <c- p>{</c->
-    <c- c1>// ...</c->
-    <c- k>template</c-><c- o>&lt;</c-><c- k>typename</c-> <c- nc>_Out</c-><c- o>></c->
-<c- k>typename</c-> <c- nc>basic_format_context</c-><c- o>&lt;</c-><c- n>_Out</c-><c- p>,</c-> <c- n>_CharT</c-><c- o>>::</c-><c- n>iterator</c->
-<c- n>format</c-><c- p>(</c-><c- n>_Tp</c-> <c- n>__u</c-><c- p>,</c-> <c- n>basic_format_context</c-><c- o>&lt;</c-><c- n>_Out</c-><c- p>,</c-> <c- n>_CharT</c-><c- o>>&amp;</c-> <c- n>__fc</c-><c- p>)</c-> <c- k>const</c->
-<c- p>{</c-> <c- k>return</c-> <c- n>_M_f</c-><c- p>.</c-><c- n>format</c-><c- p>(</c-><c- n>__u</c-><c- p>,</c-> <c- n>__fc</c-><c- p>);</c-> <c- p>}</c->
-
-  <c- k>private</c-><c- o>:</c->
-    <c- n>__format</c-><c- o>::</c-><c- n>__formatter_int</c-><c- o>&lt;</c-><c- n>_CharT</c-><c- o>></c-> <c- n>_M_f</c-><c- p>;</c->
-  <c- p>};</c->
-</pre>
-   <p>which checks <code class="highlight"><c- n>integral</c-></code> at the class template concepts and thus the explicit template parameter <code class="highlight"><c- n>streamoff</c-></code> satisfies it. Then in <code class="highlight"><c- n>format</c-></code> method, <code class="highlight"><c- n>_Tp</c-></code> is used directly so implicit conversion works.</p>
-   <p>Though it’s highly likely that compilers can optimize it to be same as re-implementing <code class="highlight"><c- n>formatter</c-></code> for <code class="highlight"><c- n>fpos</c-></code>, we suggests the implementation to checking it further.</p>
+   <p>Notice that MS-STL and libstdc++ can still utilize the implicit conversion so the <code class="highlight"><c- k>static_cast</c-></code> in <code class="highlight"><c- n>Base</c-><c- o>::</c-><c- n>format</c-></code> can be omitted. libc++ checks whether <code class="highlight"><c- n>value</c-></code> is integer in the template <code class="highlight"><c- n>Base</c-><c- o>::</c-><c- n>format</c-></code> method and thus implicit conversion cannot help.</p>
    <h2 class="heading settled" data-level="7" id="Acknowledgement"><span class="secno">7. </span><span class="content">Acknowledgement</span><a class="self-link" href="#Acknowledgement"></a></h2>
-   <p>Thanks to Victor Zverovich, the author of <a data-link-type="biblio" href="#biblio-fmt" title="The {fmt} library">[fmt]</a>, and Arthur O’Dwyer for suggestions and discussions on generalization of the conversion and encouragement to post this paper. I’d also like to extend my gratitude to Peking University for giving me a colorful undergraduate life in the last four years.</p>
+   <p>Thanks to Victor Zverovich, the author of <a data-link-type="biblio" href="#biblio-fmt" title="The {fmt} library">[fmt]</a>, and Arthur O’Dwyer for suggestions and discussions on generalization of the conversion and encouragement to post this paper. Thanks to Tom Honermann for advice on formatting the state type and assistance. I’d also like to extend my gratitude to Peking University for giving me a colorful undergraduate life in the last four years.</p>
   </main>
 <script>
 (function() {
@@ -2461,8 +2478,6 @@ all choose to make it not <code class="highlight"><c- k>explicit</c-></code>. Su
   <dl>
    <dt id="biblio-fmt">[FMT]
    <dd>Victor Zverovich; et al.. <a href="https://github.com/fmtlib/fmt"><cite>The {fmt} library</cite></a>. URL: <a href="https://github.com/fmtlib/fmt">https://github.com/fmtlib/fmt</a>
-   <dt id="biblio-p2996">[P2996]
-   <dd>Barry Revzin, Wyatt Childers, Peter Dimov, Andrew Sutton, Faisal Vali, Daveed Vandevoorde. <a href="https://wg21.link/p2996"><cite>Reflection for C++26</cite></a>. URL: <a href="https://wg21.link/p2996">https://wg21.link/p2996</a>
-   <dt id="biblio-p3070">[P3070]
-   <dd>Victor Zverovich. <a href="https://wg21.link/p3070"><cite>Formatting enums</cite></a>. URL: <a href="https://wg21.link/p3070">https://wg21.link/p3070</a>
+   <dt id="biblio-p1729">[P1729]
+   <dd>Elias Kosunen, Victor Zverovich. <a href="https://wg21.link/p1729"><cite>Text Parsing</cite></a>. URL: <a href="https://wg21.link/p1729">https://wg21.link/p1729</a>
   </dl>
