@@ -1,0 +1,48 @@
+<div class="col">
+  <a href="{% if project.redirect %}{{ project.redirect }}{% else %}{{ project.url | relative_url }}{% endif %}">
+    <div class="card h-100 hoverable">
+      {% if project.img %}
+        {%
+          include figure.liquid
+          loading="eager"
+          path=project.img
+          sizes = "250px"
+          alt="project thumbnail"
+          class="card-img-top"
+        %}
+      {% endif %}
+      <div class="card-body">
+        <h2 class="card-title">{{ project.title }}</h2>
+        <p class="card-text">{{ project.description }}</p>
+        <div class="row ml-1 mr-1 p-0" style="margin-top: 6px; margin-bottom: -6px">
+          <div data-toggle="tooltip" title="Languages" style="display:inline-block">
+            {% if project.languages %}
+              <div class="project-languages d-flex">
+                {% for lang in project.languages %}
+                  {% assign lang_color = lang.color | default: site.data.language_colors[lang.name] | default: "#888888" %}
+                  <span class="project-lang d-inline-flex mr-2">
+                    <span class="lang-dot" style="background-color: {{ lang_color }};"></span>
+                    <span class="lang-name">{{ lang.name }}</span>
+                  </span>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+          {% if project.github %}
+            <div class="github-icon">
+              <div class="icon" data-toggle="tooltip" title="Code Repository" style="display:inline-block; margin-right: 6px;">
+                <a href="{{ project.github }}"><i class="fa-brands fa-github gh-icon"></i>Github</a>
+              </div>
+            </div>
+            {% if project.github_stars %}
+              <div class="stars" data-toggle="tooltip" title="GitHub Stars" style="float:right">
+                <i class="fa-regular fa-star"></i>
+                <span class="gh-star-count" data-repo="{{project.github_stars}}"></span>
+              </div>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </a>
+</div>

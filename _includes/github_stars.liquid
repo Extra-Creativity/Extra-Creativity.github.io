@@ -1,0 +1,23 @@
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var elements = document.querySelectorAll(".gh-star-count[data-repo]");
+    if (!elements.length) return;
+    var repos = [];
+    elements.forEach(function (el) {
+      var repo = el.getAttribute("data-repo");
+      if (repos.indexOf(repo) === -1) repos.push(repo);
+    });
+    repos.forEach(function (repo) {
+      fetch("https://api.github.com/repos/" + repo)
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (data.stargazers_count !== undefined) {
+            var count = data.stargazers_count;
+            var text = Math.floor(count / 1000) ? (count / 1000).toFixed(1) + "k" : count;
+            document.querySelectorAll('.gh-star-count[data-repo="' + repo + '"]')
+              .forEach(function (el) { el.textContent = text; });
+          }
+        }).catch(function(){});
+    });
+  });
+</script>

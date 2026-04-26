@@ -1,0 +1,47 @@
+<div class="col mb-4">
+  <a href="{% if project.redirect %}{{ project.redirect }}{% else %}{{ project.url | relative_url }}{% endif %}">
+    <div class="card h-100 hoverable">
+      <div class="row no-gutters">
+        {% if project.img %}
+          <div class="col-md-6">
+            {% include figure.liquid loading="eager" path=project.img sizes="(min-width: 768px) 156px, 50vw" alt="project thumbnail" class="card-img" %}
+          </div>
+        {% endif %}
+        <div class="{% if project.img %}col-md-6{% else %}col-md-12{% endif %}">
+          <div class="card-body">
+            <h3 class="card-title">{{ project.title }}</h3>
+            <p class="card-text">{{ project.description }}</p>
+            <div class="row ml-1 mr-1 p-0">
+              <div data-toggle="tooltip" title="Languages" style="display:inline-block">
+                {% if project.languages %}
+                  <div class="project-languages d-flex">
+                    {% for lang in project.languages %}
+                      {% assign lang_color = lang.color | default: site.data.language_colors[lang.name] | default: "#888888" %}
+                      <span class="project-lang d-inline-flex mr-2">
+                        <span class="lang-dot" style="background-color: {{ lang_color }};"></span>
+                        <span class="lang-name">{{ lang.name }}</span>
+                      </span>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+              {% if project.github %}
+                <div class="github-icon">
+                  <div class="icon" data-toggle="tooltip" title="Code Repository" style="display:inline-block">
+                    <a href="{{ project.github }}"><i class="fa-brands fa-github gh-icon"></i></a>
+                  </div>
+                  {% if project.github_stars %}
+                    <span class="stars" data-toggle="tooltip" title="GitHub Stars">
+                      <i class="fa-regular fa-star"></i>
+                      <span class="gh-star-count" data-repo="{{project.github_stars}}"></span>
+                    </span>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>

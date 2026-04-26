@@ -1,0 +1,62 @@
+---
+layout: default
+---
+{% if page._styles %}
+  <!-- Page/Post style -->
+  <style type="text/css">
+    {{ page._styles }}
+  </style>
+{% endif %}
+
+<div class="post">
+  <header class="post-header">
+    {% if page.bilingual %}
+      <div class="d-flex align-items-center justify-content-between">
+        <h1 class="post-title lang-en mb-0">{{ page.title }}</h1>
+        <h1 class="post-title lang-zh mb-0">{{ page.title_zh | default: page.title }}</h1>
+        <button class="lang-toggle-btn" id="lang-toggle" data-lang="en">中文</button>
+      </div>
+      <p class="post-description lang-en">{{ page.description }}</p>
+      <p class="post-description lang-zh">{{ page.description_zh | default: page.description }}</p>
+    {% else %}
+      <h1 class="post-title">{{ page.title }}</h1>
+      <p class="post-description">{{ page.description }}</p>
+    {% endif %}
+  </header>
+
+  <article>
+    {{ content }}
+  </article>
+
+  {% if page.related_publications %}
+    <h2>References</h2>
+    <div class="publications">
+      {% bibliography --cited_in_order %}
+    </div>
+  {% endif %}
+
+  {% if site.giscus and page.giscus_comments %}
+    {% include giscus.liquid %}
+  {% endif %}
+
+  {% if page.bilingual %}
+    <script>
+      document.getElementById("lang-toggle").addEventListener("click", function () {
+        var btn = this;
+        var enBlocks = document.querySelectorAll(".lang-en");
+        var zhBlocks = document.querySelectorAll(".lang-zh");
+        if (btn.getAttribute("data-lang") === "en") {
+          enBlocks.forEach(function (el) { el.style.display = "none"; });
+          zhBlocks.forEach(function (el) { el.style.display = "block"; });
+          btn.setAttribute("data-lang", "zh");
+          btn.textContent = "EN";
+        } else {
+          zhBlocks.forEach(function (el) { el.style.display = "none"; });
+          enBlocks.forEach(function (el) { el.style.display = "block"; });
+          btn.setAttribute("data-lang", "en");
+          btn.textContent = "中文";
+        }
+      });
+    </script>
+  {% endif %}
+</div>

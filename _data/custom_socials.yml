@@ -1,0 +1,8 @@
+# jekyll-socials is 0.0.6 and lacks support of relative_url, so we write new ones here.
+bilibili:
+  logo: /assets/img/socials/bili.png
+  url: https://space.bilibili.com/18874763/
+
+Zhihu:
+  logo: /assets/img/socials/zhihu.png
+  url: https://www.zhihu.com/people/wo-shi-long-tao-xiao-guo-ding

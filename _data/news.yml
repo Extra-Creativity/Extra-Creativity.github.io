@@ -1,0 +1,52 @@
+- date: 2026-03-28
+  content: "My paper is conditionally accepted by SIGGRAPH 2026! Camera-ready verison is coming soon."
+
+- date: 2026-03-27
+  content: "I submit a LWG issue (LWG4560) regarding chrono format. This is my first issue report, and I'd like to extend my gratitude to encouragement from Howard Hinnant!"
+
+- date: 2025-12-12
+  content: "I attend a lecture of Bjarne Stroustrup and take a photo together with him :sunglasses:"
+
+- date: 2025-09-23
+  content: "I become an intern in Xiaomi as Graphics Engineer."
+
+- date: 2024-11-18
+  selected: true
+  content: "I virtually attend C++ standard meeting held in Wrocław, Poland. This is the first time I participate in standard meeting!"
+
+- date: 2024-08-25
+  selected: true
+  content: "I apply for C++ standard commitee guest and get invited by Herb Sutter. It's really a special honor for me to become a guest!"
+
+- date: 2024-08-16
+  content: "I submit a C++ proposal (P3374) regarding fpos format. This is my first proposal, and thanks for Arthur, Tom, Victor and all SG16 members!"
+
+- date: 2024-07-02
+  selected: true
+  content: "I gradaute from Peking University and get Bachelor's degree. I have deep love to Yanyuan and my undergraduate life, and I believe this is the best period in my lifelong journey!"
+
+- date: 2024-06-26
+  selected: true
+  content: "I get Excellent Graduate of Regular Institutions of Higher Education in Beijing!"
+
+- date: 2024-06-26
+  selected: true
+  content: "I get Excellent Graduate of Peking University!"
+
+- date: 2024-06-03
+  content: "I become an intern in Tencent as Gameplay Engineer."
+
+- date: 2023-12-26
+  selected: true
+  content: "I get Award for Academic Excellents in Peking University!"
+
+- date: 2023-12-26
+  selected: true
+  content: "I get The Third Prize of Peking University Scholarship in Peking University!"
+
+- date: 2023-10-12
+  selected: true
+  content: "I rank 1st among recommended master's candidates of School of Computer Science in Peking University! See page 74 of <a href='https://admission.pku.edu.cn/docs/20231101155454268680.pdf'>PKU admission announcement</a>."
+
+- date: 2023-06-06
+  content: "I rank among Top 400 in stackoverflow reputation leagues week rank (though it just keeps for two days XD)."
