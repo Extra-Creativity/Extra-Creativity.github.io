@@ -84,7 +84,12 @@ jobs:
           repository: Extra-Creativity/cpp-proposals-issues
           path: assets/repo/cpp-proposals-issues
           ref: main
-      
+      - name: Make copy of old proposals to maintain links 📚
+        run: |
+          mkdir -p public/cpp/proposals
+          cp assets/repo/cpp-proposals-issues/proposals/P3374-format-fpos/R0.html "public/cpp/proposals/add formatter for fpos-R0.html"
+          cp assets/repo/cpp-proposals-issues/proposals/P3374-format-fpos/R1.html "public/cpp/proposals/add formatter for fpos-R1.html"
+
       - name: Setup Ruby 💎
         uses: ruby/setup-ruby@v1
         with:
