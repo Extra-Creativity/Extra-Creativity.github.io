@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://extra-creativity.github.io/sitemap.xml
