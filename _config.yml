@@ -39,6 +39,11 @@ external_services:
   github_readme_stats_url: https://github-readme-stats.vercel.app
   github_profile_trophy_url: https://github-profile-trophy.vercel.app
 
+# Bilibili video parsing service (used with bilibili_video.liquid)
+# Default: public service by https://github.com/injahow/bilibili-parse
+# Replace with your own server URL if self-hosting.
+bilibili_parse_server: https://api.injahow.cn/bparse/
+
 # -----------------------------------------------------------------------------
 # RSS Feed
 # -----------------------------------------------------------------------------

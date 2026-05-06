@@ -1,0 +1,93 @@
+{% assign bvid = include.bvid %}
+{% assign p = include.p | default: 1 %}
+{% assign q = include.q | default: 64 %}
+{% assign container_id = 'dplayer-' | append: bvid | append: '-' | append: p %}
+
+<div class="bilibili-video-container">
+  <noscript>
+    <iframe
+      src="https://player.bilibili.com/player.html?bvid={{ bvid }}&p={{ p }}&high_quality=1&autoplay=0"
+      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
+      scrolling="no"
+      allowfullscreen="true"
+    ></iframe>
+  </noscript>
+  <div id="{{ container_id }}" class="dplayer-container"></div>
+</div>
+
+<script>
+  (function() {
+    var container = document.getElementById('{{ container_id }}');
+    if (!container) return;
+
+    function initDPlayer(url) {
+      new DPlayer({
+        container: container,
+        autoplay: false,
+        theme: '#b7daff',
+        loop: false,
+        lang: 'zh-cn',
+        screenshot: true,
+        hotkey: true,
+        preload: 'auto',
+        volume: 0.7,
+        mutex: true,
+        video: {
+          url: url,
+          type: 'auto',
+        },
+        danmaku: false,
+      });
+    }
+
+    function loadDPlayer(callback) {
+      if (typeof DPlayer !== 'undefined') {
+        callback();
+        return;
+      }
+      var script = document.createElement('script');
+      script.src = '{{ '/assets/js/DPlayer.min.js' | relative_url }}';
+      script.onload = callback;
+      script.onerror = function() {
+        embedFallback();
+      };
+      document.head.appendChild(script);
+    }
+
+    function fetchVideo() {
+      var server = '{{ site.bilibili_parse_server | default: "https://api.injahow.cn/bparse/" }}';
+      var params = 'bv={{ bvid }}&p={{ p }}&q={{ q }}&format=mp4';
+      var url = server + (server.indexOf('?') >= 0 ? '&' : '?') + params;
+
+      fetch(url)
+        .then(function(resp) {
+          if (!resp.ok) throw new Error('HTTP ' + resp.status);
+          return resp.json();
+        })
+        .then(function(data) {
+          if (data.url) {
+            loadDPlayer(function() {
+              initDPlayer(data.url.replace(/^https?\:\/\//i, 'https://'));
+            });
+          } else {
+            embedFallback();
+          }
+        })
+        .catch(function(err) {
+          console.warn('Failed to fetch video info:', err.message);
+          embedFallback();
+        });
+    }
+
+    function embedFallback() {
+      container.innerHTML = '<iframe'
+        + ' src="https://player.bilibili.com/player.html?bvid={{ bvid }}&p={{ p }}&high_quality=1&autoplay=0"'
+        + ' style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"'
+        + ' scrolling="no"'
+        + ' allowfullscreen="true"'
+        + '></iframe>';
+    }
+
+    fetchVideo();
+  })();
+</script>

@@ -213,9 +213,13 @@ ul.task-list input[type="checkbox"] {
     font-size: 4rem;
 
     a {
+      figure {
+        display: inline-block;
+      }
+
       img {
-        width: 3.2rem;
-        height: 3.2rem;
+        width: 4rem;
+        height: 4rem;
         margin-bottom: 1rem;
       }
 
@@ -287,6 +291,36 @@ ul.task-list input[type="checkbox"] {
     border-bottom-color: var(--global-theme-color);
     text-decoration: none;
   }
+}
+
+// Bilibili video (DPlayer)
+
+.bilibili-video-container {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; // 16:9 aspect ratio
+  margin-bottom: 1rem;
+
+  .dplayer-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.bilibili-error {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 // diff2html

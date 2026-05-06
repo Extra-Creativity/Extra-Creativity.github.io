@@ -761,7 +761,7 @@ r3 = x.load(std::memory_order_seq_cst); // F
 事实上我们以上说的术语解释都是C++26的修订结果，因为C++26对consume operation进行了deprecate。整个术语的流变可以用下面一张图总结：
 
 {% include figure.liquid loading="eager" path="https://pica.zhimg.com/v2-6cb6c1c9e5fdb004efe8ede6f52281c8_1440w.jpg" class="img-fluid rounded z-depth-1" %}
-图源：我自己的课件（ 
+<div class="caption"> 图源：我自己的课件（ </div>
 
 所以实际上C++11的strongly-happens-before并不是C++20 & 26的strongly-happens-before，但是由于consume operation总是加强成acquire operation，因此这并不会在实际的推理中增加难度。我们完全可以用C++26的术语去推理C++11的原子操作是否逻辑正确。
 

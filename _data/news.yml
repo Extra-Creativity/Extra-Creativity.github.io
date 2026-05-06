@@ -1,8 +1,11 @@
+- date: 2026-04-30
+  content: 'My course "Modern C++ Basics" has ended! It has been two years and a quarter since I uploaded the first lecture. How time flies!'
+
 - date: 2026-03-28
   content: "My paper is conditionally accepted by SIGGRAPH 2026! Camera-ready verison is coming soon."
 
 - date: 2026-03-27
-  content: "I submit a LWG issue (LWG4560) regarding chrono format. This is my first issue report, and I'd like to extend my gratitude to encouragement from Howard Hinnant!"
+  content: "I submit an LWG issue (LWG4560) regarding chrono format. This is my first issue report, and I'd like to extend my gratitude to encouragement from Howard Hinnant!"
 
 - date: 2025-12-12
   content: "I attend a lecture of Bjarne Stroustrup and take a photo together with him :sunglasses:"

@@ -84,12 +84,17 @@ layout: default
           {% for entry in site.data.custom_socials %}
             {% assign key = entry[0] %}
             {% assign value = entry[1] %}
-            {% assign logo_url = value.logo %}
-            {% unless logo_url contains '://' %}
-              {% assign logo_url = logo_url | relative_url %}
-            {% endunless %}
+            {% assign logo_path = value.logo %}
+            {% assign logo_alt = value.title | default: key %}
 
-            <a href="{{value.url}}" title='{{ value.title | default: key }}'><img class="social-icon" src="{{ logo_url }}" alt="{{ value.title | default: key }}" style="width: 64px; height: 64px"></a>
+            <a href="{{value.url}}" title='{{ logo_alt }}'>
+              {% if logo_path contains '://' %}
+                <!-- external URL: no responsive image set available -->
+                <img class="social-icon" src="{{ logo_path }}" alt="{{ logo_alt }}">
+              {% else %}
+                {% include figure.liquid path=logo_path class="social-icon" sizes="4rem" alt=logo_alt %}
+              {% endif %}
+            </a>
           {% endfor %}
 
         </div>
