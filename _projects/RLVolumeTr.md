@@ -17,4 +17,4 @@ In the project of *Deep Reinforcement Learning* by [Prof. Lu Zongqing](https://z
 
 {% include figure.liquid loading="eager" path="assets/img/projects/covers/RLVolumeTr.svg" class="img-fluid z-depth-1" %}
 
-BTW, I did lots of interesting tasks in this course, and it's worthwhile to list them here.
+BTW, I did lots of interesting tasks in this course, and it's worthwhile to list them here later! Please wait for my future update.

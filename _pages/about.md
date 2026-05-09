@@ -28,6 +28,6 @@ latest_posts:
 
 I am currently a Computer Science Master student at Graphics and Interaction Lab (GIL) in Peking University. Prior to that, I got my bachelor's degree from Peking University, and was honored to be selected as Excellent Graduates in both Peking University and Beijing.
 
-My research interests lie in ray tracing and physically-based rendering, and now I'm focusing on real-time volumetric rendering. During my undergraduate time, I also did some research on physics simulation, especially sound simulation. Moreover, I'm a C++ enthusiast and actively contribute to the C++ community. I was invited as the standard commitee (WG21) guest and virtually attended the C++ standard meeting in Wrocław. I wrote proposals, issues, blogs, and made a free course "Modern C++ Basics".
+My research interests lie in ray tracing and physically-based rendering, and now I'm focusing on real-time volumetric rendering. During my undergraduate time, I also did some research on physics simulation, especially sound simulation. Moreover, I'm a C++ enthusiast and actively contribute to the C++ community. I was invited as a standard commitee (WG21) guest and virtually attended the C++ standard meeting in Wrocław. I wrote proposals, issues, blogs, and made a free course "Modern C++ Basics".
 
 Previously, I was also an intern in Tencent as Gameplay Engineer, and in Xiaomi as Graphics Engineer. For more information, please check pages on [News](/news), [Publications](/publication) and [Projects](/projects) :smile:.

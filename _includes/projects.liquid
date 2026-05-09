@@ -2,6 +2,9 @@
   <a href="{% if project.redirect %}{{ project.redirect }}{% else %}{{ project.url | relative_url }}{% endif %}">
     <div class="card h-100 hoverable">
       {% if project.img %}
+        {% if project.card_img_position %}
+          {% assign _img_style = 'object-position: ' | append: project.card_img_position %}
+        {% endif %}
         {%
           include figure.liquid
           loading="eager"
@@ -9,6 +12,7 @@
           sizes = "250px"
           alt="project thumbnail"
           class="card-img-top"
+          img_style=_img_style
         %}
       {% endif %}
       <div class="card-body">

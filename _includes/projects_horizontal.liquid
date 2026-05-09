@@ -3,8 +3,11 @@
     <div class="card h-100 hoverable">
       <div class="row no-gutters">
         {% if project.img %}
+          {% if project.card_img_position %}
+            {% assign _img_style = 'object-position: ' | append: project.card_img_position %}
+          {% endif %}
           <div class="col-md-6">
-            {% include figure.liquid loading="eager" path=project.img sizes="(min-width: 768px) 156px, 50vw" alt="project thumbnail" class="card-img" %}
+            {% include figure.liquid loading="eager" path=project.img sizes="(min-width: 768px) 156px, 50vw" alt="project thumbnail" class="card-img" img_style=_img_style %}
           </div>
         {% endif %}
         <div class="{% if project.img %}col-md-6{% else %}col-md-12{% endif %}">

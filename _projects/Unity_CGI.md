@@ -54,10 +54,15 @@ I implement Dual Quaternion Skinning (DQS), which to some extent overcomes typic
         <div class="caption"> Fluid </div>
     </div>
 </div>
+
+<div markdown="1">
 These results are implemented as follows:
+
 1. Cloth: by Mass-Spring system.
 2. Elastic body: by Finite Element Method (FEM).
 3. Fluid: by Smoothed-Particle Hydrodynamics (SPH). The container bottom uses a high punishment to particles (i.e. when particles try to go out of container boundary, a large opposite force will be applied) to mimic boiling water.
+</div>
+
 </div>
 
 > For PKU student: It seems that Prof. Liu Libin doesn't offer this course anymore, and I feel that it's really a pity. However, he has new courses and I believe they're worth a try!
