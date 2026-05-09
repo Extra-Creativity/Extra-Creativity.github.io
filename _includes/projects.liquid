@@ -12,7 +12,7 @@
         %}
       {% endif %}
       <div class="card-body">
-        <h2 class="card-title">{{ project.title }}</h2>
+        <h2 class="card-title"{% if project.card_title_size %} style="font-size: {{ project.card_title_size }}"{% endif %}>{{ project.title }}</h2>
         <p class="card-text">{{ project.description }}</p>
         <div class="row ml-1 mr-1 p-0" style="margin-top: 6px; margin-bottom: -6px">
           <div data-toggle="tooltip" title="Languages" style="display:inline-block">

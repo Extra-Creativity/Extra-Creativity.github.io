@@ -1,10 +1,12 @@
 ---
 layout: page
 title: Fight The Lord
-description:'"Fight The Lord 2" (斗地主) poker game program.'
-img: assets/img/7.jpg
-importance: 3
+description: '"Fight The Lord 2" (斗地主) poker "AI" gamer program.'
+img: assets/img/projects/covers/FightTheLord.png
+importance: 4
 category: Fun
+languages:
+  - name: C++
 ---
 
 Project in *Practice of Programming in C & C++*. I, together with other two classmates, implemented an strategy that combined human experience, greedy algorithm and DFS. I also implemented a botzone-like local platform so my bots can evolve itself and fine-tune the algorithm parameters.

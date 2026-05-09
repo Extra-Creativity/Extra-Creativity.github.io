@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Embeed System Project
+title: Embedded System Project
 description: EasyRender
 img: assets/img/6.jpg
 importance: 4

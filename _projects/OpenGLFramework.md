@@ -2,9 +2,12 @@
 layout: page
 title: OpenGLFramework
 description: My first framework on OpenGL to implement rendering algorithms.
-img: assets/img/4.jpg
+img: assets/img/projects/OpenGLFramework/PCSS.png
 importance: 1
 category: Fun
+github: https://github.com/Extra-Creativity/OpenGLFramework
+languages:
+  - name: C++
 ---
 
 After I completed the tutorial [LearnOpenGL](https://learnopengl.com/), I felt that it was quite inconvenient to use and there also existed some bad practice in code. Therefore, I spent some time to encapsulate OpenGL, optimized the framework and equipped it with many tests and documents. Based on this project, I implemented PCSS, VSSM and simple SSR (screen-space reflection).

@@ -4,7 +4,9 @@ title: NoGo
 description: '"NoGo" (不围棋) chess program. My first project since I majored in computer science.'
 img: assets/img/projects/NoGo/image.jpg
 importance: 2
-category: Fun
+category: fun
+languages:
+  - name: C++
 ---
 
 My first programming course, *Introduction to Computation (A)*, used NoGo as the final project. Genreally, it negates rules of Go (or Weiqi); you lose when you have to capture a stone (吃子) of the other under Go rules.

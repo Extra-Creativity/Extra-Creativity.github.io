@@ -2,69 +2,17 @@
 layout: page
 title: Sound Renderer
 description: A visual renderer with sound simulation for SIGGRAPH 2022 Labs Session.
-img: assets/img/9.jpg
+img: assets/img/projects/covers/SoundRenderer.png
 importance: 2
-category: work
+category: Work
 github: https://github.com/hellojxt/SoundRender
+languages:
+  - name: C++
+  - name: CUDA
 ---
 
-Every project has a beautiful feature showcase page.
-It's easy to include images in a flexible 3-column grid format.
-Make your photos 1/3, 2/3, or full width.
+We made a visual and sound renderer to use in SIGGRAPH 2022 Labs Session for NeuralSound (<a href="https://hellojxt.github.io/NeuralSound/">[Jin et.al. 2022]</a>). When a primitive is clicked, its modal analysis will be triggered and vibration result is then filled into audio buffer so users can hear sound. NeuralSound is used to precompute modal data and acoustic maps for the material and model very quickly (hundreds of milliseconds to achieve accuracy of traditional methods in several seconds).
 
-To give your project a background in the portfolio page, just add the img tag to the front matter like so:
+I'm sorry that I only find a low-quality recording; it may be updated when I have spare time to record a new one (and please contact me if you really want it :-)).
 
-    ---
-    layout: page
-    title: project
-    description: a project with a background image
-    img: /assets/img/12.jpg
-    ---
-
-<div class="caption">
-    Caption photos easily. On the left, a road goes through a tunnel. Middle, leaves artistically fall in a hipster photoshoot. Right, in another hipster photoshoot, a lumberjack grasps a handful of pine needles.
-</div>
-<div class="row">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/5.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
-<div class="caption">
-    This image can also have a caption. It's like magic.
-</div>
-
-You can also put regular text between your rows of images.
-Say you wanted to write a little bit about your project before you posted the rest of the images.
-You describe how you toiled, sweated, _bled_ for your project, and then... you reveal its glory in the next row of images.
-
-<div class="row justify-content-sm-center">
-    <div class="col-sm-8 mt-3 mt-md-0">
-        {% include figure.liquid path="assets/img/6.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm-4 mt-3 mt-md-0">
-        {% include figure.liquid path="assets/img/11.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
-<div class="caption">
-    You can also have artistically styled 2/3 + 1/3 images, like these.
-</div>
-
-The code is simple.
-Just wrap your images with `<div class="col-sm">` and place them inside `<div class="row">` (read more about the <a href="https://getbootstrap.com/docs/4.4/layout/grid/">Bootstrap Grid</a> system).
-To make images responsive, add `img-fluid` class to each; for rounded corners and shadows use `rounded` and `z-depth-1` classes.
-Here's the code for the last row of images above:
-
-{% raw %}
-
-```html
-<div class="row justify-content-sm-center">
-  <div class="col-sm-8 mt-3 mt-md-0">
-    {% include figure.liquid path="assets/img/6.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-  </div>
-  <div class="col-sm-4 mt-3 mt-md-0">
-    {% include figure.liquid path="assets/img/11.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-  </div>
-</div>
-```
-
-{% endraw %}
+{% include bilibili_video.liquid bvid="BV1sXRrB8ErE" p=7 q=32 %}

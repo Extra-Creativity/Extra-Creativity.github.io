@@ -307,6 +307,11 @@ ul.task-list input[type="checkbox"] {
     left: 0;
     width: 100%;
     height: 100%;
+
+    // Prevent global typography styles from overriding DPlayer's own colors
+    span, em, div, p, strong {
+      color: inherit;
+    }
   }
 }
 
@@ -321,6 +326,45 @@ ul.task-list input[type="checkbox"] {
   align-items: center;
   justify-content: center;
   text-align: center;
+}
+
+// Bilibili video section list
+
+.video-section-header {
+  display: block;
+  width: 100%;
+  padding: 0.7rem 1rem;
+  margin-bottom: 0;
+  border: none;
+  background: var(--global-card-bg-color);
+  color: var(--global-text-color);
+  text-align: left;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  transition: background 0.2s;
+
+  &:hover {
+    background: var(--global-theme-color);
+    color: #fff;
+  }
+
+  .video-section-chevron {
+    display: inline-block;
+    transition: transform 0.2s;
+    margin-right: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  &.open .video-section-chevron {
+    transform: rotate(90deg);
+  }
+}
+
+.video-section-body {
+  display: none;
+  padding: 0.5rem 0 1rem 0;
 }
 
 // diff2html
