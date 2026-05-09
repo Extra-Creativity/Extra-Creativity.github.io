@@ -55,16 +55,86 @@ ninja.data = [{
             window.location.href = "/blog/2025/MemoryOrder/";
           
         },
-      },{id: "projects-coming-soon",
+      },{id: "projects-towards-rotation-invariant-point-cloud-classification",
+          title: 'Towards Rotation-Invariant Point Cloud Classification',
+          description: "another project with an image 🎉",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/10_project/";
+            },},{id: "projects-dip-project",
+          title: 'DIP-Project',
+          description: "another project with an image 🎉",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/11_project/";
+            },},{id: "projects-embedded-system-project",
+          title: 'Embedded System Project',
+          description: "EasyRender",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/12_project/";
+            },},{id: "projects-coming-soon",
           title: 'Coming Soon...',
           description: "",
           section: "Projects",handler: () => {
               window.location.href = "/projects/ComingSoon/";
+            },},{id: "projects-easyrender",
+          title: 'EasyRender',
+          description: "OptiX-based high-performance Renderer",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/EasyRender/";
+            },},{id: "projects-fight-the-lord",
+          title: 'Fight The Lord',
+          description: "&quot;Fight The Lord 2&quot; (斗地主) poker &quot;AI&quot; gamer program.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/FightTheLord/";
+            },},{id: "projects-miscellaneous",
+          title: 'Miscellaneous',
+          description: "Labs on ICS, Operating System, Network and Architecture.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/Misc/";
             },},{id: "projects-modern-c-basics",
           title: 'Modern C++ Basics',
           description: "A free online course originally for PKU sophomore undergraduate, including most of important features from C++11 to C++23.",
           section: "Projects",handler: () => {
               window.location.href = "/projects/ModernCppBasics/";
+            },},{id: "projects-nogo",
+          title: 'NoGo',
+          description: "&quot;NoGo&quot; (不围棋) chess program. My first project since I majored in computer science.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/NoGo/";
+            },},{id: "projects-openglframework",
+          title: 'OpenGLFramework',
+          description: "My first framework on OpenGL to implement rendering algorithms.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/OpenGLFramework/";
+            },},{id: "projects-volume-transmittance-estimation-based-on-deeprl",
+          title: 'Volume Transmittance Estimation Based on DeepRL',
+          description: "Experimental project to use deep reinforcement learning in rendering problem.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/RLVolumeTr/";
+            },},{id: "projects-simple-ray-tracing-based-renderer",
+          title: 'Simple Ray-Tracing Based Renderer',
+          description: "A naive CPU-based ray-tracing renderer accelerated by OpenMP.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/RTRender/";
+            },},{id: "projects-raft-consensus-algorithm",
+          title: 'Raft consensus algorithm',
+          description: "another without an image",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/Raft/";
+            },},{id: "projects-sound-renderer",
+          title: 'Sound Renderer',
+          description: "A visual renderer with sound simulation for SIGGRAPH 2022 Labs Session.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/SoundRender/";
+            },},{id: "projects-sysy-compiler",
+          title: 'SysY compiler',
+          description: "Project of Compiler Principles, together with a C++ highlighter (for fun!)",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/SysY/";
+            },},{id: "projects-unity-animation-and-physics-implementation",
+          title: 'Unity Animation and Physics Implementation',
+          description: "PKU CGI Labs, implement DQS, fluid simulation, etc.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/Unity_CGI/";
             },},{
         id: 'social-email',
         title: 'email',
