@@ -253,6 +253,15 @@
   ></script>
 {% endif %}
 
+{% if site.enable_ahrefs_analytics and jekyll.environment == 'production' %}
+  <!-- Ahrefs Analytics -->
+  <script
+    async
+    src="https://analytics.ahrefs.com/analytics.js"
+    data-key="{{ site.ahrefs_analytics }}"
+  ></script>
+{% endif %}
+
 {% if site.enable_cronitor_analytics %}
   <!-- Cronitor RUM -->
   <script
