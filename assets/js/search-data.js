@@ -55,6 +55,17 @@ ninja.data = [{
             window.location.href = "/blog/2025/MemoryOrder/";
           
         },
+      },{id: "post-和体渲染爆了-一文看懂exponential-media-transmittance-estimation",
+        
+          title: "和体渲染爆了：一文看懂Exponential Media Transmittance Estimation",
+        
+        description: "Thorough review and analysis to volumetric transmittance estimation",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/TrEst/";
+          
+        },
       },{id: "projects-towards-rotation-invariant-point-cloud-classification",
           title: 'Towards Rotation-Invariant Point Cloud Classification',
           description: "another project with an image 🎉",
