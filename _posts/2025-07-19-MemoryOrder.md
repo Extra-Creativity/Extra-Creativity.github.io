@@ -3,7 +3,7 @@ layout: post
 title: 不是你怎么变来变去的：详解C++ Memory Order理论模型
 date: 2025-07-19
 description: Theoretical model of C++ memory order.
-tags: Memory-order Multithreading
+tags: memory-order multithreading
 categories: C++
 read_time: 60
 toc:
