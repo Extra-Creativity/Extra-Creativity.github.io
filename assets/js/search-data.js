@@ -16,14 +16,21 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/news/";
           },
-        },{id: "nav-blogs",
-          title: "Blogs",
-          description: "",
-          section: "Navigation",
-          handler: () => {
-            window.location.href = "/blog/";
-          },
-        },{id: "nav-publications",
+        },{id: "dropdown-中文",
+              title: "中文",
+              description: "",
+              section: "Dropdown",
+              handler: () => {
+                window.location.href = "/blog/";
+              },
+            },{id: "dropdown-english",
+              title: "English",
+              description: "",
+              section: "Dropdown",
+              handler: () => {
+                window.location.href = "/blog/";
+              },
+            },{id: "nav-publications",
           title: "Publications",
           description: "",
           section: "Navigation",
@@ -44,7 +51,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/cv/";
           },
-        },{id: "post-不是你怎么变来变去的-详解c-memory-order理论模型",
+        },{id: "post-c-26-reflection-在c-中实现c-operator",
+        
+          title: "【C++26 Reflection】在C++中实现C# operator?.",
+        
+        description: "May the NULL be with you.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/NullCollapse/";
+          
+        },
+      },{id: "post-不是你怎么变来变去的-详解c-memory-order理论模型",
         
           title: "不是你怎么变来变去的：详解C++ Memory Order理论模型",
         
@@ -66,7 +84,12 @@ ninja.data = [{
             window.location.href = "/blog/2025/TrEst/";
           
         },
-      },{id: "projects-towards-rotation-invariant-point-cloud-classification",
+      },{id: "posts_en-c-26-reflection-implement-c-operator-in-c",
+          title: '[C++26 Reflection] Implement C# operator?. in C++',
+          description: "May the NULL be with you.",
+          section: "Posts_en",handler: () => {
+              window.location.href = "/blog/en/2026/NullCollapse/";
+            },},{id: "projects-towards-rotation-invariant-point-cloud-classification",
           title: 'Towards Rotation-Invariant Point Cloud Classification',
           description: "another project with an image 🎉",
           section: "Projects",handler: () => {
