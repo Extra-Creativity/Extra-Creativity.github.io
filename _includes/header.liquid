@@ -63,7 +63,7 @@
               {% if p.dropdown %}
                 {% assign has_active_child = false %}
                 {% for child in p.children %}
-                  {% if page.title == child.title %}
+                  {% if page.url contains child.permalink %}
                     {% assign has_active_child = true %}
                   {% endif %}
                 {% endfor %}

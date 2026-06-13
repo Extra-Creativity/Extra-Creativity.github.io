@@ -166,6 +166,11 @@ collections:
     output: true
   teachings:
     output: true
+  posts_en:
+    defaults:
+      layout: post
+    output: true
+    permalink: /blog/en/:year/:title/
 
 # -----------------------------------------------------------------------------
 # Jekyll settings
@@ -270,6 +275,12 @@ jekyll-archives:
       year: "/blog/:year/"
       tags: "/blog/:type/:name/"
       categories: "/blog/:type/:name/"
+  posts_en:
+    enabled: [year, tags, categories]
+    permalinks:
+      year: "/blog/en/:year/"
+      tags: "/blog/en/:type/:name/"
+      categories: "/blog/en/:type/:name/"
   books:
     enabled: [year, tags, categories] # enables year, tag and category archives (remove if you need to disable one of them).
 
