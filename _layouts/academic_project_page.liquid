@@ -1,0 +1,91 @@
+---
+layout: default
+---
+
+{% comment %}
+  Academic project page layout — clean paper-style page, no navbar.
+  All styles compiled via _sass/_academic_project_page.scss into main.css.
+{% endcomment %}
+
+<button id="light-toggle" class="academic-theme-toggle" title="Change theme">
+  <i class="fa-half-sun-moon" id="light-toggle-system"></i>
+  <i class="fa-solid fa-moon" id="light-toggle-dark"></i>
+  <i class="fa-solid fa-sun" id="light-toggle-light"></i>
+</button>
+
+{% include academic/hero.liquid %}
+
+{% include academic/teaser.liquid %}
+
+<div class="academic-content">
+  {{ content }}
+</div>
+
+{% include academic/bibtex_block.liquid %}
+
+<div class="academic-footer-note">
+  <p>
+    This page partially integrates <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="external nofollow noopener">Academic Project Page Template</a> derived from the <a href="https://nerfies.github.io/" target="_blank" rel="external nofollow noopener">Nerfies</a> project page.
+  </p>
+</div>
+
+<script>
+  (function () {
+    var content = document.querySelector(".academic-content");
+    if (!content) return;
+
+    var h2s = content.querySelectorAll("h2");
+    if (h2s.length === 0) return;
+
+    h2s.forEach(function (h2, index) {
+      if (h2.closest(".section-body") || h2.closest(".academic-section")) return;
+
+      var section = document.createElement("section");
+      section.className = "academic-section";
+      if (index % 2 === 0) {
+        section.classList.add("has-background");
+      }
+
+      var body = document.createElement("div");
+      body.className = "section-body";
+      if (h2.classList.contains("wide")) body.classList.add("wide");
+      if (h2.classList.contains("full")) body.classList.add("full");
+
+      h2.parentNode.insertBefore(section, h2);
+      section.appendChild(body);
+      body.appendChild(h2);
+
+      var next = section.nextElementSibling;
+      while (next && next.tagName !== "H2") {
+        var toMove = next;
+        next = toMove.nextElementSibling;
+        body.appendChild(toMove);
+      }
+    });
+  })();
+
+  // Make bibtex background opposite of the last content section
+  var sections = document.querySelectorAll(".academic-content .academic-section");
+  if (sections.length > 0) {
+    var last = sections[sections.length - 1];
+    var bibtex = document.getElementById("BibTeX");
+    if (bibtex) {
+      if (last.classList.contains("has-background")) {
+        bibtex.classList.remove("has-background");
+      } else {
+        bibtex.classList.add("has-background");
+      }
+    }
+  }
+
+  // Clean up copy_code.js wrapper from bibtex <pre> (runs after defer scripts)
+  document.addEventListener("DOMContentLoaded", function () {
+    var bibtexPre = document.getElementById("academic-bibtex-code");
+    if (!bibtexPre) return;
+    var wrapper = bibtexPre.closest(".code-display-wrapper");
+    if (wrapper) {
+      wrapper.parentNode.insertBefore(bibtexPre, wrapper);
+      wrapper.remove();
+    }
+  });
+</script>

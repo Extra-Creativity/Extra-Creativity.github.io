@@ -1,0 +1,18 @@
+{% comment %}
+  Image comparison slider using img-comparison-slider v8.
+  Requires page.images.compare: true in frontmatter.
+{% endcomment %}
+<figure class="academic-compare">
+  <img-comparison-slider class="academic-compare-slider" value="50">
+    <img slot="first" src="{{ include.image_a | relative_url }}" alt="Before" loading="lazy" width="100%">
+    <img slot="second" src="{{ include.image_b | relative_url }}" alt="After" loading="lazy" width="100%">
+    <svg slot="handle" width="56" height="56" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="28" cy="28" r="27" fill="none" stroke="#fff" stroke-width="2" opacity="0.9"/>
+      <polygon points="18,18 13,28 18,38" fill="#fff" opacity="0.9"/>
+      <polygon points="38,18 43,28 38,38" fill="#fff" opacity="0.9"/>
+    </svg>
+  </img-comparison-slider>
+  {% if include.caption %}
+    <figcaption class="carousel-caption"{% if include.caption_size %} style="font-size:{{ include.caption_size }}"{% endif %}>{{ include.caption }}</figcaption>
+  {% endif %}
+</figure>

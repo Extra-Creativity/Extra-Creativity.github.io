@@ -1,0 +1,26 @@
+{% comment %}
+  Academic project page teaser section.
+  Frontmatter:
+    - page.teaser_video: path to MP4 (takes priority)
+    - page.teaser_image: path to image (shown if no video)
+    - page.teaser_caption: optional caption text below the media
+{% endcomment %}
+
+{% if page.teaser_video or page.teaser_image %}
+  <section class="academic-teaser">
+    <div class="teaser-inner">
+      {% if page.teaser_video %}
+        <video class="teaser-media" autoplay controls muted loop playsinline preload="metadata">
+          <source src="{{ page.teaser_video | relative_url }}" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      {% elsif page.teaser_image %}
+        <img class="teaser-media" src="{{ page.teaser_image | relative_url }}" alt="Teaser" loading="eager">
+      {% endif %}
+
+      {% if page.teaser_caption %}
+        <p class="teaser-caption">{{ page.teaser_caption }}</p>
+      {% endif %}
+    </div>
+  </section>
+{% endif %}

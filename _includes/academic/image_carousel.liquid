@@ -1,0 +1,75 @@
+{% comment %}
+  Swiper-based image carousel for academic project pages.
+  Parameters:
+    - include.images: comma-separated image filenames (e.g. "img1.png,img2.png,img3.png")
+    - include.captions: comma-separated captions (optional, same order as images)
+    - include.image_dir: directory prefix for images (optional, e.g. "/assets/img/projects/paper/")
+  Swiper CSS/JS is already loaded on the site (configured in _config.yml).
+{% endcomment %}
+
+{% assign carousel_id = include.id | default: "academic-carousel" %}
+{% assign image_list = include.images | split: "," %}
+{% assign caption_list = include.captions | split: "," %}
+{% assign img_dir = include.image_dir | default: "" %}
+
+<div class="academic-carousel">
+  <div class="swiper" id="{{ carousel_id }}">
+    <div class="swiper-wrapper">
+      {% for img in image_list %}
+        {% assign img_trimmed = img | strip %}
+        <div class="swiper-slide">
+          <div class="carousel-item-wrapper">
+            <img
+              src="{{ img_dir | append: img_trimmed | relative_url }}"
+              alt="{{ caption_list[forloop.index0] | strip | default: 'Result ' | append: forloop.index }}"
+              loading="lazy"
+            >
+            {% assign cap = caption_list[forloop.index0] | strip %}
+            {% if cap != "" %}
+              <p class="carousel-caption">{{ cap }}</p>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="swiper-pagination"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    // Wait for Swiper to be available
+    function initCarousel() {
+      if (typeof Swiper === "undefined") {
+        setTimeout(initCarousel, 200);
+        return;
+      }
+      new Swiper("#{{ carousel_id }}", {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        loop: true,
+        autoplay: {
+          delay: 4000,
+          disableOnInteraction: false,
+        },
+        pagination: {
+          el: "#{{ carousel_id }} .swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: "#{{ carousel_id }} .swiper-button-next",
+          prevEl: "#{{ carousel_id }} .swiper-button-prev",
+        },
+        breakpoints: {
+          768: {
+            slidesPerView: 2,
+            spaceBetween: 20,
+          },
+        },
+      });
+    }
+    initCarousel();
+  })();
+</script>

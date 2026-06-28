@@ -1,0 +1,53 @@
+{% comment %}
+  Academic project page BibTeX block.
+  Frontmatter: page.bibtex (raw BibTeX string, use | in YAML)
+  Omitted if page.bibtex is not set.
+{% endcomment %}
+
+{% if page.bibtex %}
+  <section class="academic-bibtex" id="BibTeX">
+    <div class="bibtex-header">
+      <h2 class="section-title">BibTeX</h2>
+      <button class="copy-bibtex-btn" onclick="copyAcademicBibtex()" title="Copy BibTeX to clipboard">
+        <i class="fas fa-copy"></i>
+        <span class="copy-text">Copy</span>
+      </button>
+    </div>
+    <pre id="academic-bibtex-code"><code>{{ page.bibtex | escape_once }}</code></pre>
+  </section>
+
+  <script>
+    function copyAcademicBibtex() {
+      var code = document.getElementById("academic-bibtex-code").textContent;
+      var btn = document.querySelector(".copy-bibtex-btn");
+      var copyText = btn.querySelector(".copy-text");
+      var origBg = btn.style.background;
+
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(code).then(function () {
+          btn.classList.add("copied");
+          copyText.textContent = "Copied!";
+          setTimeout(function () {
+            btn.classList.remove("copied");
+            copyText.textContent = "Copy";
+          }, 2000);
+        });
+      } else {
+        var textArea = document.createElement("textarea");
+        textArea.value = code;
+        textArea.style.position = "fixed";
+        textArea.style.opacity = "0";
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+        btn.classList.add("copied");
+        copyText.textContent = "Copied!";
+        setTimeout(function () {
+          btn.classList.remove("copied");
+          copyText.textContent = "Copy";
+        }, 2000);
+      }
+    }
+  </script>
+{% endif %}

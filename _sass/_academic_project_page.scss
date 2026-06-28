@@ -1,0 +1,522 @@
+/*******************************************************************************
+ * Academic Project Page styles
+ * Compiled into main.css alongside the rest of the site styles.
+ ******************************************************************************/
+
+// ============================================================================
+// Theme Toggle (top-right corner)
+// ============================================================================
+
+.academic-theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  background: var(--global-bg-color);
+  border: 1px solid var(--global-divider-color);
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: var(--global-text-color);
+  transition: background 0.2s;
+
+  &:hover {
+    background: var(--global-card-bg-color);
+  }
+}
+
+// ============================================================================
+// Hero Section
+// ============================================================================
+
+.academic-hero {
+  padding: 4rem 1.5rem;
+  text-align: center;
+  background: var(--global-bg-color);
+
+  .hero-inner {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .publication-title {
+    font-weight: 800;
+    color: var(--global-text-color);
+    margin-bottom: 1.5rem;
+    line-height: 1.15;
+  }
+
+  .publication-authors {
+    margin-bottom: 0.75rem;
+    color: var(--global-text-color);
+
+    .author-block {
+      display: inline-block;
+      margin-right: 0.25rem;
+
+      a {
+        color: var(--global-theme-color);
+        text-decoration: none;
+        font-weight: 600;
+
+        &:hover {
+          color: var(--global-hover-color);
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  .publication-venue {
+    color: var(--global-text-color-light);
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+
+  .publication-affiliations {
+    margin-bottom: 0.25rem;
+
+    .affiliation-item {
+      display: inline-block;
+      margin-right: 0.75rem;
+      color: var(--global-text-color-light);
+      font-size: 0.9rem;
+    }
+  }
+
+  .eql-cntrb {
+    font-size: 0.875rem;
+    color: var(--global-text-color-light);
+    font-style: italic;
+    margin-top: 0.5rem;
+  }
+
+  .publication-links {
+    margin-top: 1.5rem;
+
+    .link-block {
+      display: inline-block;
+      margin: 0.25rem;
+    }
+  }
+}
+
+// ============================================================================
+// Action Buttons
+//   Black bg + white text (unlike Bootstrap default), red on hover
+// ============================================================================
+
+.academic-btn {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  text-decoration: none !important;
+  cursor: pointer;
+  background: #1e293b !important;
+  color: #fff !important;
+  border: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+
+  // Ensure all children are white too
+  * {
+    color: #fff !important;
+  }
+
+  .icon {
+    font-size: 0.9rem;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background: var(--global-theme-color) !important;
+    color: #fff !important;
+    text-decoration: none !important;
+
+    * {
+      color: #fff !important;
+    }
+  }
+}
+
+// ============================================================================
+// Teaser Section
+// ============================================================================
+
+.academic-teaser {
+  padding: 1rem 1.5rem 3rem;
+  text-align: center;
+
+  .teaser-inner {
+    display: table;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .teaser-media {
+    max-width: 100% !important;
+    width: auto !important;
+    height: auto !important;
+    max-height: 360px;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  .teaser-caption {
+    margin: 1rem 0 0;
+    color: var(--global-text-color-light);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    text-align: left;
+  }
+
+}
+
+// ============================================================================
+// Content Sections (wrapped from h2 by JS at runtime)
+// ============================================================================
+
+.academic-section {
+  padding: 3rem 1.5rem;
+  background: var(--global-bg-color);
+
+  &.has-background {
+    background: rgba(0, 0, 0, 0.03);
+    border-top: 1px solid var(--global-divider-color);
+    border-bottom: 1px solid var(--global-divider-color);
+  }
+
+  // In dark mode, use a white overlay instead
+  html[data-theme="dark"] &.has-background {
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .section-body {
+    max-width: 768px;
+    margin: 0 auto;
+
+    &.wide {
+      max-width: 960px;
+    }
+
+    &.full {
+      max-width: none;
+      margin-left: 0;
+      margin-right: 0;
+    }
+    color: var(--global-text-color);
+    font-size: 1.05rem;
+    line-height: 1.8;
+
+    h2 {
+      font-weight: 700;
+      color: var(--global-text-color);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      text-align: center;
+      position: relative;
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 3px;
+        background: var(--global-theme-color);
+        border-radius: 2px;
+      }
+    }
+
+    h3 {
+      font-weight: 600;
+      color: var(--global-text-color);
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    p {
+      margin-bottom: 1.25rem;
+    }
+
+    a {
+      color: var(--global-theme-color);
+      text-decoration: none;
+
+      &:hover {
+        color: var(--global-hover-color);
+        text-decoration: underline;
+      }
+    }
+
+    table {
+      margin: 1.5rem 0;
+      width: 100%;
+      border-collapse: collapse;
+
+      th,
+      td {
+        padding: 0.5rem 0.75rem;
+        border: 1px solid var(--global-divider-color);
+      }
+
+      th {
+        background: var(--global-card-bg-color);
+        font-weight: 600;
+      }
+    }
+
+    ul,
+    ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.25rem;
+
+      li {
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    img {
+      max-width: 100%;
+      border-radius: 0.5rem;
+      margin: 0 0 0 0;
+    }
+
+    pre,
+    code {
+      background: var(--global-card-bg-color);
+      border: 1px solid var(--global-divider-color);
+      border-radius: 0.375rem;
+    }
+
+    code {
+      padding: 0.15rem 0.4rem;
+      font-size: 0.9em;
+    }
+
+    pre {
+      padding: 1rem;
+      overflow-x: auto;
+
+      code {
+        border: none;
+        padding: 0;
+        background: transparent;
+      }
+    }
+  }
+}
+
+// ============================================================================
+// Image Comparison Slider (img-comparison-slider v8)
+// ============================================================================
+
+.academic-compare {
+  max-width: 960px;
+  margin: 0 0 0 0;
+}
+
+img-comparison-slider:focus-visible {
+  outline: none;
+}
+
+// ============================================================================
+// Image Carousel (Swiper-based)
+// ============================================================================
+
+.academic-carousel {
+  padding: 1rem 0;
+  max-width: 960px;
+  margin: 0 auto;
+
+  .carousel-item-wrapper {
+    background: var(--global-card-bg-color);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    border: 1px solid var(--global-divider-color);
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 0.5rem;
+    }
+  }
+
+  .carousel-caption {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    color: var(--global-text-color-light);
+  }
+}
+
+// ============================================================================
+// YouTube Embed
+// ============================================================================
+
+.academic-video-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 768px;
+  margin: 1.5rem auto;
+  padding-bottom: 56.25%;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 0.75rem;
+  }
+}
+
+// ============================================================================
+// BibTeX Block
+// ============================================================================
+
+.academic-bibtex {
+  padding: 3rem 1.5rem;
+  background: var(--global-bg-color);
+
+  &.has-background {
+    background: rgba(0, 0, 0, 0.03);
+    border-top: 1px solid var(--global-divider-color);
+    border-bottom: 1px solid var(--global-divider-color);
+
+    html[data-theme="dark"] & {
+      background: rgba(255, 255, 255, 0.03);
+    }
+  }
+
+  .bibtex-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 768px;
+    margin: 0 auto 1rem;
+  }
+
+  .section-title {
+    font-weight: 700;
+    color: var(--global-text-color);
+    margin: 0;
+  }
+
+  .copy-bibtex-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1.1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    border: none;
+    background: #1e293b !important;
+    color: #fff !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+
+    * {
+      color: #fff !important;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      background: var(--global-theme-color) !important;
+
+      * {
+        color: #fff !important;
+      }
+    }
+
+    &.copied {
+      background: #10b981 !important;
+    }
+  }
+
+  pre {
+    max-width: 768px;
+    margin: 0 auto;
+    background: var(--global-card-bg-color);
+    border: 1px solid var(--global-divider-color);
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+    font-size: 0.85rem;
+    overflow-x: auto;
+
+    code {
+      background: transparent;
+      color: var(--global-text-color);
+    }
+  }
+}
+
+// ============================================================================
+// Footer Note
+// ============================================================================
+
+.academic-footer-note {
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--global-text-color-light);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--global-divider-color);
+  background: var(--global-bg-color);
+
+  a {
+    color: var(--global-theme-color);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// ============================================================================
+// Responsive
+// ============================================================================
+
+@media screen and (max-width: 768px) {
+  .academic-hero {
+    padding: 2.5rem 1rem;
+  }
+  .academic-teaser {
+    padding: 0.5rem 1rem 2rem;
+  }
+  .academic-section {
+    padding: 2rem 1rem;
+  }
+  .academic-btn {
+    padding: 0.4rem 0.9rem;
+    font-size: 0.85rem;
+  }
+  .academic-bibtex pre {
+    font-size: 0.75rem;
+    padding: 1rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .academic-hero .publication-title {
+    font-size: 1.5rem !important;
+  }
+  .academic-hero .publication-authors {
+    font-size: 0.9rem;
+  }
+  .academic-btn {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
+}

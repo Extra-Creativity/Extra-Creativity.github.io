@@ -1,0 +1,103 @@
+{% comment %}
+  Academic project page hero section.
+  Frontmatter:
+    - page.title
+    - page.authors: array of {name, url, star, affil}
+        affil = number or array of numbers, indices into page.affiliations (1-based)
+    - page.affiliations: array of organization name strings (e.g. ["Org A", "Org B"])
+        (supports the legacy page.affiliation single-string format)
+    - page.venue
+    - page.paper_url, page.supp_url, page.code_url, page.arxiv_url
+{% endcomment %}
+
+{% assign has_star = false %}
+{% assign has_affil = false %}
+{% for author in page.authors %}
+  {% if author.star %}{% assign has_star = true %}{% endif %}
+  {% if author.affil %}{% assign has_affil = true %}{% endif %}
+{% endfor %}
+
+<section class="academic-hero">
+  <div class="hero-inner">
+    <h1 class="publication-title">{{ page.title }}</h1>
+
+    <div class="publication-authors">
+      {% for author in page.authors %}
+        <span class="author-block">
+          {%- if author.url %}<a href="{{ author.url }}" target="_blank" rel="external nofollow noopener">{% endif -%}
+          {{- author.name -}}
+          {%- if author.url %}</a>{% endif -%}
+          {%- assign superscripts = "" -%}
+          {%- if author.affil -%}
+            {%- for a in author.affil -%}
+              {%- assign superscripts = superscripts | append: a -%}
+              {%- unless forloop.last %}{% assign superscripts = superscripts | append: "," %}{% endunless -%}
+            {%- endfor -%}
+          {%- endif -%}
+          {%- if author.star -%}
+            {%- if superscripts != "" %}{% assign superscripts = superscripts | append: "," %}{% endif -%}
+            {%- assign superscripts = superscripts | append: "*" -%}
+          {%- endif -%}
+          {%- if superscripts != "" %}<sup>{{ superscripts }}</sup>{% endif -%}
+          {%- unless forloop.last %},{% endunless %}
+        </span>
+      {% endfor %}
+    </div>
+
+    {% if has_affil and page.affiliations %}
+      <div class="publication-affiliations">
+        {% for affil in page.affiliations %}
+          <span class="affiliation-item"><sup>{{ forloop.index }}</sup>{{ affil }}</span>
+        {% endfor %}
+      </div>
+    {% elsif page.affiliation %}
+      <div class="publication-venue">{{ page.affiliation }}</div>
+    {% endif %}
+
+    {% if page.venue %}
+      <div class="publication-venue">{{ page.venue }}</div>
+    {% endif %}
+
+    {% if has_star %}
+      <div class="eql-cntrb"><sup>*</sup>Indicates Equal Contribution</div>
+    {% endif %}
+
+    <div class="publication-links">
+      {% if page.paper_url %}
+        <span class="link-block">
+          <a href="{{ page.paper_url | relative_url }}" target="_blank" class="academic-btn">
+            <span class="icon"><i class="fas fa-file-pdf"></i></span>
+            <span>Paper</span>
+          </a>
+        </span>
+      {% endif %}
+
+      {% if page.supp_url %}
+        <span class="link-block">
+          <a href="{{ page.supp_url | relative_url }}" target="_blank" class="academic-btn">
+            <span class="icon"><i class="fas fa-file-pdf"></i></span>
+            <span>Supplementary</span>
+          </a>
+        </span>
+      {% endif %}
+
+      {% if page.code_url %}
+        <span class="link-block">
+          <a href="{{ page.code_url }}" target="_blank" class="academic-btn" rel="external nofollow noopener">
+            <span class="icon"><i class="fab fa-github"></i></span>
+            <span>Code</span>
+          </a>
+        </span>
+      {% endif %}
+
+      {% if page.arxiv_url %}
+        <span class="link-block">
+          <a href="{{ page.arxiv_url }}" target="_blank" class="academic-btn" rel="external nofollow noopener">
+            <span class="icon"><i class="ai ai-arxiv"></i></span>
+            <span>arXiv</span>
+          </a>
+        </span>
+      {% endif %}
+    </div>
+  </div>
+</section>
