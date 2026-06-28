@@ -1,16 +1,17 @@
 ---
 layout: academic_project_page
-title: "Multi-feature Radiance Baking Neural Networks for Instant Volumetric Rendering"
+paper_title: "Multi-feature Radiance Baking Neural Networks for Instant Volumetric Rendering"
 no_nav: true
 full_width: true
 images:
   compare: true
 
-card_title_size: 1.5rem
+card_title_size: 1.8rem
+title: "MRBNN for Instant Volumetric Rendering"
 importance: 0
 category: Work
 description: SIGGRAPH 2026 Paper for lightning fast volumetric rendering.
-img: assets/img/projects/MRBNN/rep.jpeg
+img: assets/img/publication_preview/mrbnn.jpeg
 languages:
   - name: C++
   - name: CUDA
