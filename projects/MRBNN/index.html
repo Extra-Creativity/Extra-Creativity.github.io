@@ -1,0 +1,173 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> Multi-feature Radiance Baking Neural Networks for Instant Volumetric Rendering | Liang Jiaming </title> <meta name="author" content="Liang Jiaming "> <meta name="description" content="SIGGRAPH 2026 Paper for lightning fast volumetric rendering."> <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website"> <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; media-src 'self' https:; frame-src 'self' https:; connect-src 'self' https:;"> <link rel="stylesheet" href="/assets/css/bootstrap.min.css?v=a4b3f509e79c54a512b890d73235ef04"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="/assets/css/academicons.min.css?v=f0b7046b84e425c55f3463ac249818f5"> <link defer rel="stylesheet" href="/assets/css/scholar-icons.css?v=62b2ac103a88034e6882a5be5f3e2772"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css?v=d41d8cd98f00b204e9800998ecf8427e"> <link rel="canonical" href="https://extra-creativity.github.io/projects/MRBNN/"> <script src="/assets/js/theme.js?v=5fea5159b787642c1bbc1f334d60f883"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
+    initTheme();
+  </script> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/img-comparison-slider@8.0.6/dist/styles.min.css" integrity="sha256-3qTIuuUWIFnnU3LpQMjqiXc0p09rvd0dmj+WkpQXSR8=" crossorigin="anonymous"> </head> <body class=" "> <button id="light-toggle" class="academic-theme-toggle" title="Change theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> <section class="academic-hero"> <div class="hero-inner"> <h1 class="publication-title">Multi-feature Radiance Baking Neural Networks for Instant Volumetric Rendering</h1> <div class="publication-authors"> <span class="author-block"><a href="https://extra-creativity.github.io" target="_blank" rel="external nofollow noopener">Jiaming Liang</a><sup>1</sup>, </span> <span class="author-block">Hongliang Yuan<sup>2</sup>, </span> <span class="author-block">Meng Gai<sup>1</sup>, </span> <span class="author-block">Guoping Wang<sup>1</sup>, </span> <span class="author-block"><a href="https://lishengpku.github.io/" target="_blank" rel="external nofollow noopener">Sheng Li</a><sup>1</sup> </span> </div> <div class="publication-affiliations"> <span class="affiliation-item"><sup>1</sup>School of Computer Science, Peking University</span> <span class="affiliation-item"><sup>2</sup>Xiaomi Company</span> </div> <div class="publication-venue">SIGGRAPH 2026</div> <div class="publication-links"> <span class="link-block"> <a href="/projects/ComingSoon/" target="_blank" class="academic-btn"> <span class="icon"><i class="fas fa-file-pdf"></i></span> <span>Paper</span> </a> </span> <span class="link-block"> <a href="/projects/ComingSoon/" target="_blank" class="academic-btn"> <span class="icon"><i class="fas fa-file-pdf"></i></span> <span>Supplementary</span> </a> </span> <span class="link-block"> <a href="/projects/ComingSoon/" target="_blank" class="academic-btn" rel="external nofollow noopener"> <span class="icon"><i class="fab fa-github"></i></span> <span>Code</span> </a> </span> </div> </div> </section> <section class="academic-teaser"> <div class="teaser-inner"> <img class="teaser-media" src="/assets/img/projects/MRBNN/teaser.jpg" alt="Teaser" loading="eager"> <p class="teaser-caption">MRBNN (Ours) renders complex multi-scattering effects of dense volumes in 200 FPS for 1024 × 1024 resolution with three-channel albedo, reaching 5× speedup over the state-of-the-art (MRPNN) while preserving high visual quality (a) thanks to our compact feature sampling and network design. Moreover, our method supports not only modification of globally homogeneous albedo and phase (b), but also rendering volumes with spatially varying albedo (c) and heterogeneous phase parameters (d), which are beyond the capabilities of prior work.</p> </div> </section> <div class="academic-content"> <h2 id="abstract">Abstract</h2> <p>Photorealistic volume rendering suffers from slow convergence with traditional path tracing algorithms and poses significant challenges for real-time applications. In this paper, we present Multi-feature Radiance Baking Neural Networks (MRBNN), a neural volumetric rendering method that achieves real-time performance by leveraging analytic decomposition of scattering with an efficient learned representation. Our method reformulates in-scattering integral in Volumetric Radiance Transfer Equation to diagonal scaling operator in spherical harmonics spectrum. Building on this formulation, we propose a compact factorized representation with low-rank compression in latent space that replaces costly integration. We then introduce efficient dual-pattern feature sampling and a lightweight neural decoder for fast radiance prediction. With these dedicated designs, MRBNN achieves 4~5× speedup over the state-of-the-art while maintaining high visual fidelity. Moreover, our method addresses key limitations of prior work, including over-illumination artifacts and inability to handle volumes with spatially varying albedo or heterogeneous phase parameters. Extensive experiments demonstrate that our neural baking method can synthesize photorealistic images for complex volumes in a few milliseconds.</p> <h2 class="wide" id="results">Results</h2> <div class="row mt-3"> <div class="col-sm mt-3 mt-md-0"> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/projects/MRBNN/sparse/gt-480.webp 480w,/assets/img/projects/MRBNN/sparse/gt-800.webp 800w,/assets/img/projects/MRBNN/sparse/gt-1400.webp 1400w," type="image/webp" sizes="95vw"></source> <img src="/assets/img/projects/MRBNN/sparse/gt.jpg" class="img-fluid z-depth-1" width="100%" height="auto" loading="eager" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"> </picture> </figure> <figcaption class="carousel-caption" style="font-size:0.7rem">Reference</figcaption> </div> <div class="col-sm mt-3 mt-md-0"> <figure class="academic-compare"> <img-comparison-slider class="academic-compare-slider" value="50"> <img slot="first" src="/assets/img/projects/MRBNN/sparse/120.jpg" alt="Before" loading="lazy" width="100%"> <img slot="second" src="/assets/img/projects/MRBNN/sparse/pt-120.jpg" alt="After" loading="lazy" width="100%"> <svg slot="handle" width="56" height="56" viewbox="0 0 56 56" xmlns="http://www.w3.org/2000/svg"> <circle cx="28" cy="28" r="27" fill="none" stroke="#fff" stroke-width="2" opacity="0.9"></circle> <polygon points="18,18 13,28 18,38" fill="#fff" opacity="0.9"></polygon> <polygon points="38,18 43,28 38,38" fill="#fff" opacity="0.9"></polygon> </svg> </img-comparison-slider> <figcaption class="carousel-caption" style="font-size:0.7rem">Left: Our method. Right: Path tracing (120 spp).</figcaption> </figure> </div> <div class="col-sm mt-3 mt-md-0"> <figure class="academic-compare"> <img-comparison-slider class="academic-compare-slider" value="50"> <img slot="first" src="/assets/img/projects/MRBNN/sparse/120.jpg" alt="Before" loading="lazy" width="100%"> <img slot="second" src="/assets/img/projects/MRBNN/sparse/mrpnn-120.jpg" alt="After" loading="lazy" width="100%"> <svg slot="handle" width="56" height="56" viewbox="0 0 56 56" xmlns="http://www.w3.org/2000/svg"> <circle cx="28" cy="28" r="27" fill="none" stroke="#fff" stroke-width="2" opacity="0.9"></circle> <polygon points="18,18 13,28 18,38" fill="#fff" opacity="0.9"></polygon> <polygon points="38,18 43,28 38,38" fill="#fff" opacity="0.9"></polygon> </svg> </img-comparison-slider> <figcaption class="carousel-caption" style="font-size:0.7rem">Left: Our method. Right: MRPNN.</figcaption> </figure> </div> </div> <div style="max-width: 768px;margin-left: auto; margin-right: auto; "> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/projects/MRBNN/eq-cmp-480.webp 480w,/assets/img/projects/MRBNN/eq-cmp-800.webp 800w,/assets/img/projects/MRBNN/eq-cmp-1400.webp 1400w," type="image/webp" sizes="95vw"></source> <img src="/assets/img/projects/MRBNN/eq-cmp.jpg" class="img-fluid z-depth-1" width="100%" height="auto" loading="eager" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"> </picture> </figure> <div class="caption"> Equal-time Comparison </div> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/projects/MRBNN/equal-spp-480.webp 480w,/assets/img/projects/MRBNN/equal-spp-800.webp 800w,/assets/img/projects/MRBNN/equal-spp-1400.webp 1400w," type="image/webp" sizes="95vw"></source> <img src="/assets/img/projects/MRBNN/equal-spp.jpg" class="img-fluid z-depth-1" width="100%" height="auto" loading="eager" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"> </picture> </figure> <div class="caption"> Equal-spp Comparison </div> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/projects/MRBNN/close-up-480.webp 480w,/assets/img/projects/MRBNN/close-up-800.webp 800w,/assets/img/projects/MRBNN/close-up-1400.webp 1400w," type="image/webp" sizes="95vw"></source> <img src="/assets/img/projects/MRBNN/close-up.jpg" class="img-fluid z-depth-1" width="100%" height="auto" loading="eager" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"> </picture> </figure> <div class="caption"> Close-up views </div> </div> <h2 class="wide" id="supplementary-video">Supplementary Video</h2> <div class="bilibili-video-container"> <noscript> <iframe src="https://player.bilibili.com/player.html?bvid=BV1wATu6mEZd&amp;p=1&amp;high_quality=1&amp;autoplay=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" scrolling="no" allowfullscreen="true"></iframe> </noscript> <div id="dplayer-BV1wATu6mEZd-1" class="dplayer-container"></div> </div> <script>
+    (function() {
+      var container = document.getElementById('dplayer-BV1wATu6mEZd-1');
+      if (!container) return;
+
+      function initDPlayer(url) {
+        new DPlayer({
+          container: container,
+          autoplay: false,
+          theme: '#b7daff',
+          loop: false,
+          lang: 'zh-cn',
+          screenshot: true,
+          hotkey: true,
+          preload: 'auto',
+          volume: 0.7,
+          mutex: true,
+          video: {
+            url: url,
+            type: 'auto',
+          },
+          danmaku: false,
+        });
+      }
+
+      function loadDPlayer(callback) {
+        if (typeof DPlayer !== 'undefined') {
+          callback();
+          return;
+        }
+        var script = document.createElement('script');
+        script.src = '/assets/js/DPlayer.min.js';
+        script.onload = callback;
+        script.onerror = function() {
+          embedFallback();
+        };
+        document.head.appendChild(script);
+      }
+
+      function fetchVideo() {
+        var server = 'https://api.injahow.cn/bparse/';
+        var params = 'bv=BV1wATu6mEZd&p=1&q=80&format=mp4';
+        var url = server + (server.indexOf('?') >= 0 ? '&' : '?') + params;
+
+        fetch(url)
+          .then(function(resp) {
+            if (!resp.ok) throw new Error('HTTP ' + resp.status);
+            return resp.json();
+          })
+          .then(function(data) {
+            if (data.url) {
+              loadDPlayer(function() {
+                initDPlayer(data.url.replace(/^https?\:\/\//i, 'https://'));
+              });
+            } else {
+              embedFallback();
+            }
+          })
+          .catch(function(err) {
+            console.warn('Failed to fetch video info:', err.message);
+            embedFallback();
+          });
+      }
+
+      function embedFallback() {
+        container.innerHTML = '<iframe'
+          + ' src="https://player.bilibili.com/player.html?bvid=BV1wATu6mEZd&p=1&high_quality=1&autoplay=0"'
+          + ' style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"'
+          + ' scrolling="no"'
+          + ' allowfullscreen="true"'
+          + '></iframe>';
+      }
+
+      fetchVideo();
+    })();
+  </script> </div> <section class="academic-bibtex" id="BibTeX"> <div class="bibtex-header"> <h2 class="section-title">BibTeX</h2> <button class="copy-bibtex-btn" onclick="copyAcademicBibtex()" title="Copy BibTeX to clipboard"> <i class="fas fa-copy"></i> <span class="copy-text">Copy</span> </button> </div> <pre id="academic-bibtex-code"><code>Coming Soon
+</code></pre> </section> <script>
+    function copyAcademicBibtex() {
+      var code = document.getElementById("academic-bibtex-code").textContent;
+      var btn = document.querySelector(".copy-bibtex-btn");
+      var copyText = btn.querySelector(".copy-text");
+      var origBg = btn.style.background;
+
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(code).then(function () {
+          btn.classList.add("copied");
+          copyText.textContent = "Copied!";
+          setTimeout(function () {
+            btn.classList.remove("copied");
+            copyText.textContent = "Copy";
+          }, 2000);
+        });
+      } else {
+        var textArea = document.createElement("textarea");
+        textArea.value = code;
+        textArea.style.position = "fixed";
+        textArea.style.opacity = "0";
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+        btn.classList.add("copied");
+        copyText.textContent = "Copied!";
+        setTimeout(function () {
+          btn.classList.remove("copied");
+          copyText.textContent = "Copy";
+        }, 2000);
+      }
+    }
+  </script> <div class="academic-footer-note"> <p> This page partially integrates <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="external nofollow noopener">Academic Project Page Template</a> derived from the <a href="https://nerfies.github.io/" target="_blank" rel="external nofollow noopener">Nerfies</a> project page. </p> </div> <script>
+  (function () {
+    var content = document.querySelector(".academic-content");
+    if (!content) return;
+
+    var h2s = content.querySelectorAll("h2");
+    if (h2s.length === 0) return;
+
+    h2s.forEach(function (h2, index) {
+      if (h2.closest(".section-body") || h2.closest(".academic-section")) return;
+
+      var section = document.createElement("section");
+      section.className = "academic-section";
+      if (index % 2 === 0) {
+        section.classList.add("has-background");
+      }
+
+      var body = document.createElement("div");
+      body.className = "section-body";
+      if (h2.classList.contains("wide")) body.classList.add("wide");
+      if (h2.classList.contains("full")) body.classList.add("full");
+
+      h2.parentNode.insertBefore(section, h2);
+      section.appendChild(body);
+      body.appendChild(h2);
+
+      var next = section.nextElementSibling;
+      while (next && next.tagName !== "H2") {
+        var toMove = next;
+        next = toMove.nextElementSibling;
+        body.appendChild(toMove);
+      }
+    });
+  })();
+
+  // Make bibtex background opposite of the last content section
+  var sections = document.querySelectorAll(".academic-content .academic-section");
+  if (sections.length > 0) {
+    var last = sections[sections.length - 1];
+    var bibtex = document.getElementById("BibTeX");
+    if (bibtex) {
+      if (last.classList.contains("has-background")) {
+        bibtex.classList.remove("has-background");
+      } else {
+        bibtex.classList.add("has-background");
+      }
+    }
+  }
+
+  // Clean up copy_code.js wrapper from bibtex <pre> (runs after defer scripts)
+  document.addEventListener("DOMContentLoaded", function () {
+    var bibtexPre = document.getElementById("academic-bibtex-code");
+    if (!bibtexPre) return;
+    var wrapper = bibtexPre.closest(".code-display-wrapper");
+    if (wrapper) {
+      wrapper.parentNode.insertBefore(bibtexPre, wrapper);
+      wrapper.remove();
+    }
+  });
+</script> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Liang Jiaming . Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. </div> </footer> <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> <script src="/assets/js/bootstrap.bundle.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?v=a0db7e5d5c70cc3252b3138b0c91dcaf" type="text/javascript"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/js/zoom.js?v=85ddb88934d28b74e78031fd54cf8308"></script> <script src="/assets/js/no_defer.js?v=2781658a0a2b13ed609542042a859126"></script> <script defer src="/assets/js/common.js?v=ea2faac4cd0982e7c21d99b0a9ee8f5f"></script> <script defer src="/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?v=d9f17b6adc2311cbabd747f4538bb15f"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script src="/assets/js/mathjax-setup.js?v=a5bb4e6a542c546dd929b24b8b236dfd"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script async src="https://analytics.ahrefs.com/analytics.js" data-key="pJ5ZTs7hJ+WgpzQSP+3N6g"></script> <script defer src="/assets/js/progress-bar.js?v=2f30e0e6801ea8f5036fa66e1ab0a71a" type="text/javascript"></script> <script defer src="https://cdn.jsdelivr.net/npm/img-comparison-slider@8.0.6/dist/index.min.js" integrity="sha256-EXHg3x1K4oIWdyohPeKX2ZS++Wxt/FRPH7Nl01nat1o=" crossorigin="anonymous"></script> <script src="/assets/js/vanilla-back-to-top.min.js?v=f40d453793ff4f64e238e420181a1d17"></script> <script>
+    addBackToTop();
+  </script> <script type="module" src="/assets/js/search/ninja-keys.min.js?v=a3446f084dcaecc5f75aa1757d087dcf"></script> <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Type to start searching"></ninja-keys> <script src="/assets/js/search-setup.js?v=6c304f7b1992d4b60f7a07956e52f04a"></script> <script src="/assets/js/search-data.js"></script> <script src="/assets/js/shortcut-key.js?v=ccc841c459bfc0e64c1c2b5acd10df02"></script> </body> </html>

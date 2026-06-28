@@ -51,9 +51,9 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/cv/";
           },
-        },{id: "post-c-26-reflection-在c-中实现c-operator",
+        },{id: "post-c-26-reflection-在c-中实现c-lt-code-gt-operator-lt-code-gt",
         
-          title: "【C++26 Reflection】在C++中实现C# operator?.",
+          title: "【C++26 Reflection】在C++中实现C# &lt;code&gt;operator?.&lt;/code&gt;",
         
         description: "May the NULL be with you.",
         section: "Posts",
@@ -119,6 +119,11 @@ ninja.data = [{
           description: "&quot;Fight The Lord 2&quot; (斗地主) poker &quot;AI&quot; gamer program.",
           section: "Projects",handler: () => {
               window.location.href = "/projects/FightTheLord/";
+            },},{id: "projects-multi-feature-radiance-baking-neural-networks-for-instant-volumetric-rendering",
+          title: 'Multi-feature Radiance Baking Neural Networks for Instant Volumetric Rendering',
+          description: "SIGGRAPH 2026 Paper for lightning fast volumetric rendering.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/MRBNN/";
             },},{id: "projects-miscellaneous",
           title: 'Miscellaneous',
           description: "Labs on ICS, Operating System, Network and Architecture.",
