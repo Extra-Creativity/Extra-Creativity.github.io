@@ -119,8 +119,8 @@ ninja.data = [{
           description: "&quot;Fight The Lord 2&quot; (斗地主) poker &quot;AI&quot; gamer program.",
           section: "Projects",handler: () => {
               window.location.href = "/projects/FightTheLord/";
-            },},{id: "projects-multi-feature-radiance-baking-neural-networks-for-instant-volumetric-rendering",
-          title: 'Multi-feature Radiance Baking Neural Networks for Instant Volumetric Rendering',
+            },},{id: "projects-mrbnn-for-instant-volumetric-rendering",
+          title: 'MRBNN for Instant Volumetric Rendering',
           description: "SIGGRAPH 2026 Paper for lightning fast volumetric rendering.",
           section: "Projects",handler: () => {
               window.location.href = "/projects/MRBNN/";
