@@ -90,6 +90,13 @@ jobs:
           cp assets/repo/cpp-proposals-issues/proposals/P3374-format-fpos/R0.html "public/cpp/proposals/add formatter for fpos-R0.html"
           cp assets/repo/cpp-proposals-issues/proposals/P3374-format-fpos/R1.html "public/cpp/proposals/add formatter for fpos-R1.html"
 
+      - name: Checkout Repo3
+        uses: actions/checkout@v4
+        with:
+          repository: Extra-Creativity/MRBNN-assets
+          path: assets/pdf/MRBNN
+          ref: main
+
       - name: Setup Ruby 💎
         uses: ruby/setup-ruby@v1
         with:
