@@ -1,3 +1,6 @@
+- date: 2026-07-12
+  content: "My SIGGRAPH 2026 paper <em>Multi-feature Radiance Baking Neural Networks for Instant Volumetric Rendering</em> has been released, together with our renderer open-sourced! Check <a href='/projects/MRBNN/'>our project page</a> for details."
+
 - date: 2026-04-30
   content: 'My course "Modern C++ Basics" has ended! It has been two years and a quarter since I uploaded the first lecture. How time flies!'
 
