@@ -62,6 +62,17 @@ ninja.data = [{
             window.location.href = "/blog/2026/NullCollapse/";
           
         },
+      },{id: "post-shared-ptr中原子计数器如何选择memory-order",
+        
+          title: "shared_ptr中原子计数器如何选择memory order？",
+        
+        description: "A typical application (and practice) of C++ memory order.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/SharedPtrOrder/";
+          
+        },
       },{id: "post-不是你怎么变来变去的-详解c-memory-order理论模型",
         
           title: "不是你怎么变来变去的：详解C++ Memory Order理论模型",
@@ -84,7 +95,86 @@ ninja.data = [{
             window.location.href = "/blog/2025/TrEst/";
           
         },
-      },{id: "posts_en-c-26-reflection-implement-c-operator-in-c",
+      },{id: "post-对c-使用f-string吧-p3412讲解",
+        
+          title: "对C++使用f-string吧！- P3412讲解",
+        
+        description: "...BECOME FSTRING.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/fstring/";
+          
+        },
+      },{id: "post-c-26-dr23-加速std-print",
+        
+          title: "C++26 (DR23) - 加速std::print",
+        
+        description: "Make std::print even faster!",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/P3107/";
+          
+        },
+      },{id: "post-分层抽样与蒙特卡洛积分方法",
+        
+          title: "分层抽样与蒙特卡洛积分方法",
+        
+        description: "Analysis of stratified sampling in Monte Carlo method, which is widely used in Graphics.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/StatifiedSampling/";
+          
+        },
+      },{id: "post-数学分析知识范畴内对黎曼可积lebesgue判据的证明",
+        
+          title: "数学分析知识范畴内对黎曼可积Lebesgue判据的证明",
+        
+        description: "The best mathematical proof during my undergraduate life.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2021/Lebesgue/";
+          
+        },
+      },{id: "posts_en-proof-of-the-lebesgue-criterion-for-riemann-integrability-within-the-scope-of-mathematical-analysis",
+          title: 'Proof of the Lebesgue Criterion for Riemann Integrability within the Scope of Mathematical...',
+          description: "The best mathematical proof during my undergraduate life.",
+          section: "Posts_en",handler: () => {
+              window.location.href = "/blog/en/2021/Lebesgue/";
+            },},{id: "posts_en-stratified-sampling-and-monte-carlo-integration",
+          title: 'Stratified Sampling and Monte Carlo Integration',
+          description: "Analysis of stratified sampling in Monte Carlo method, which is widely used in Graphics.",
+          section: "Posts_en",handler: () => {
+              window.location.href = "/blog/en/2024/StatifiedSampling/";
+            },},{id: "posts_en-c-26-dr23-accelerating-std-print",
+          title: 'C++26 (DR23) - Accelerating std::print',
+          description: "Make std::print even faster!",
+          section: "Posts_en",handler: () => {
+              window.location.href = "/blog/en/2024/P3107/";
+            },},{id: "posts_en-use-f-strings-in-c-p3412-explained",
+          title: 'Use f-strings in C++! - P3412 Explained',
+          description: "...BECOME FSTRING.",
+          section: "Posts_en",handler: () => {
+              window.location.href = "/blog/en/2025/fstring/";
+            },},{id: "posts_en-comprehensive-paper-analysis-to-exponential-media-transmittance-estimation",
+          title: 'Comprehensive Paper Analysis to Exponential Media Transmittance Estimation',
+          description: "Thorough review and analysis of volumetric transmittance estimation",
+          section: "Posts_en",handler: () => {
+              window.location.href = "/blog/en/2025/TrEst/";
+            },},{id: "posts_en-detailed-explanation-of-the-c-memory-order-theoretical-model",
+          title: 'Detailed Explanation of the C++ Memory Order Theoretical Model',
+          description: "Wait, why do you change frequently?",
+          section: "Posts_en",handler: () => {
+              window.location.href = "/blog/en/2025/MemoryOrder/";
+            },},{id: "posts_en-how-to-choose-the-memory-order-for-shared-ptr-39-s-atomic-counter",
+          title: 'How to Choose the Memory Order for shared_ptr&amp;#39;s Atomic Counter?',
+          description: "A typical application (and practice) of C++ memory order.",
+          section: "Posts_en",handler: () => {
+              window.location.href = "/blog/en/2025/SharedPtrOrder/";
+            },},{id: "posts_en-c-26-reflection-implement-c-operator-in-c",
           title: '[C++26 Reflection] Implement C# operator?. in C++',
           description: "May the NULL be with you.",
           section: "Posts_en",handler: () => {
