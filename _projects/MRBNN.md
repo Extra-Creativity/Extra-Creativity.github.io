@@ -40,6 +40,8 @@ venue: "SIGGRAPH 2026"
 paper_url: "/assets/pdf/MRBNN/paper.pdf"
 code_url: "https://github.com/Extra-Creativity/MRBNN"
 supp_url: "/assets/pdf/MRBNN/supplementary.pdf"
+slides_url: "/assets/pdf/MRBNN/slides.pdf"
+poster_url: "/assets/pdf/MRBNN/poster.pdf"
 
 teaser_image: "assets/img/projects/MRBNN/teaser.jpg"
 teaser_caption: "MRBNN (Ours) renders complex multi-scattering effects of dense volumes in 200 FPS for 1024 × 1024 resolution with three-channel albedo, reaching 5× speedup over the state-of-the-art (MRPNN) while preserving high visual quality (a) thanks to our compact feature sampling and network design. Moreover, our method supports not only modification of globally homogeneous albedo and phase (b), but also rendering volumes with spatially varying albedo (c) and heterogeneous phase parameters (d), which are beyond the capabilities of prior work."

@@ -8,6 +8,7 @@
         (supports the legacy page.affiliation single-string format)
     - page.venue
     - page.paper_url, page.supp_url, page.code_url, page.arxiv_url
+    - page.slides_url, page.poster_url (shown in a "Presentation" dropdown)
 {% endcomment %}
 
 {% assign has_star = false %}
@@ -98,6 +99,70 @@
           </a>
         </span>
       {% endif %}
+
+      {% if page.slides_url or page.poster_url %}
+        <span class="link-block presentation-dropdown">
+          <button type="button" class="academic-btn presentation-toggle" aria-haspopup="true" aria-expanded="false">
+            <span class="icon"><i class="fa-solid fa-chalkboard-user"></i></span>
+            <span>Presentation</span>
+            <span class="icon caret"><i class="fa-solid fa-chevron-down"></i></span>
+          </button>
+          <ul class="presentation-menu">
+            {% if page.slides_url %}
+              <li>
+                <a href="{{ page.slides_url | relative_url }}" target="_blank" rel="external nofollow noopener">
+                  <span class="icon"><i class="fa-solid fa-file-powerpoint"></i></span>
+                  <span>Slides</span>
+                </a>
+              </li>
+            {% endif %}
+            {% if page.poster_url %}
+              <li>
+                <a href="{{ page.poster_url | relative_url }}" target="_blank" rel="external nofollow noopener">
+                  <span class="icon"><i class="fa-solid fa-image"></i></span>
+                  <span>Poster</span>
+                </a>
+              </li>
+            {% endif %}
+          </ul>
+        </span>
+      {% endif %}
     </div>
   </div>
 </section>
+
+{% if page.slides_url or page.poster_url %}
+  <script>
+    (function () {
+      var dropdowns = document.querySelectorAll(".presentation-dropdown");
+
+      function closeAll() {
+        dropdowns.forEach(function (d) {
+          d.classList.remove("open");
+          d.querySelector(".presentation-toggle").setAttribute("aria-expanded", "false");
+        });
+      }
+
+      dropdowns.forEach(function (dropdown) {
+        var btn = dropdown.querySelector(".presentation-toggle");
+        if (!btn) return;
+        btn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          var isOpen = dropdown.classList.contains("open");
+          closeAll();
+          if (!isOpen) {
+            dropdown.classList.add("open");
+            btn.setAttribute("aria-expanded", "true");
+          }
+        });
+      });
+
+      document.addEventListener("click", function (e) {
+        if (!e.target.closest(".presentation-dropdown")) closeAll();
+      });
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") closeAll();
+      });
+    })();
+  </script>
+{% endif %}

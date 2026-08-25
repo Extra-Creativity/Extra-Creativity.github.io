@@ -144,6 +144,69 @@
   }
 }
 
+// Presentation dropdown (slides / poster links under a single button)
+.presentation-dropdown {
+  position: relative;
+
+  .presentation-toggle .caret {
+    font-size: 0.7rem;
+    transition: transform 0.15s ease;
+  }
+
+  .presentation-menu {
+    position: absolute;
+    top: calc(100% + 0.4rem);
+    left: 50%;
+    transform: translate(-50%, -4px);
+    margin: 0;
+    padding: 0.35rem;
+    list-style: none;
+    min-width: 100%;
+    background: var(--global-card-bg-color);
+    border: 1px solid var(--global-divider-color);
+    border-radius: 0.5rem;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+    z-index: 20;
+
+    li {
+      margin: 0;
+
+      a {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.45rem 0.75rem;
+        white-space: nowrap;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--global-text-color);
+        text-decoration: none;
+        border-radius: 0.35rem;
+
+        &:hover {
+          background: var(--global-theme-color);
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  &.open {
+    .presentation-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, 0);
+    }
+
+    .presentation-toggle .caret {
+      transform: rotate(180deg);
+    }
+  }
+}
+
 // ============================================================================
 // Teaser Section
 // ============================================================================

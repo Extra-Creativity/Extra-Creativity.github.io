@@ -173,11 +173,13 @@
         border-color: var(--global-text-color);
       }
 
-      div.revisions.hidden {
+      div.revisions.hidden,
+      div.presentation.hidden {
         border: solid 1px var(--global-bg-color);
       }
 
-      div.revisions.hidden.open {
+      div.revisions.hidden.open,
+      div.presentation.hidden.open {
         border-color: var(--global-theme-color);
         padding: 8px;
       }

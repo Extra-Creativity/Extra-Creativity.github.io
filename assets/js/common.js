@@ -1,6 +1,6 @@
 $(document).ready(function () {
-  // add toggle functionality to abstract, award, bibtex and revisions buttons
-  var toggleClasses = ["abstract", "award", "bibtex", "revisions"];
+  // add toggle functionality to abstract, award, bibtex, presentation and revisions buttons
+  var toggleClasses = ["abstract", "award", "bibtex", "presentation", "revisions"];
   toggleClasses.forEach(function (cls) {
     $("a." + cls).click(function () {
       var container = $(this).parent().parent();
