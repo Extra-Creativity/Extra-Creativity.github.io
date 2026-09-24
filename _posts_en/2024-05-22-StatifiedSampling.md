@@ -18,72 +18,73 @@ Recently I've been cramming PBRT, and I found the explanation of stratified samp
 Let the sampling domain of a random variable $$X$$ be $$\Lambda$$, partitioned into non-overlapping subsets $$\Lambda_i$$ that cover $$\Lambda$$; each $$\Lambda_i$$ is called a stratum. Let the random variable $$W$$ also be defined on $$\Lambda$$. Stratified sampling can be performed based on the following two prerequisites:
 
 - For any $$\Lambda_j$$, $$P(W\in\Lambda_j)$$ can be easily computed. A simple approach is to let $$W$$ follow a uniform distribution, so that $$P(W\in \Lambda_j)$$ is the ratio of the "volume" of the current stratum to the "volume" of the entire domain.
-- $$X_i=(X|W\in\Lambda_i)$$ is easy to sample; in other words, each stratum should be easy to sample from. To achieve variance reduction, $$X$$ and $$W$$ typically need to be dependent.
+- $$X_i=(X\vert W\in\Lambda_i)$$ is easy to sample; in other words, each stratum should be easy to sample from. To achieve variance reduction, $$X$$ and $$W$$ typically need to be dependent.
 
 Define the indicator variable $$I=i\text{ if }W\in\Lambda_i$$, so that $$P(I=i)=P(W\in\Lambda_i)$$. **Stratified sampling uses $$\hat X=\sum_i P_iX_i$$, estimating the expectation of the random variable $$X_i$$ within each stratum via sampling, and then using the expectation of $$\hat X$$ as the estimate of the expectation of the random variable $$X$$.**
 
 That is:
 
-$$E(X)=\sum_iP(I=i)E(X|I=i)$$
+$$E(X)=\sum_iP(I=i)E(X\vert I=i)$$
 
 **Proof**: From the definition of expectation we have:
 
-$$E(X)=\int xp(x) dx,\quad E(X|I=i)=\int xp(x|I=i)dx$$
+$$E(X)=\int xp(x) dx,\quad E(X\vert I=i)=\int xp(x\vert I=i)dx$$
 
 By the law of total probability:
 
-$$P(X\leq x)=\sum_i P(X\leq x|I=i)P(I=i)$$
+$$P(X\leq x)=\sum_i P(X\leq x\vert I=i)P(I=i)$$
 
 Differentiating with respect to $$x$$ gives:
 
-$$p(x)=\sum_i p(x|I=i)P(I=i)$$
+$$p(x)=\sum_i p(x\vert I=i)P(I=i)$$
 
 Thus:
 
-$$E(X)=\int xp(x)dx=\int x\sum_i p(x|I=i)P(I=i) dx=\sum_iP(I=i)E(X|I=i)$$
+$$E(X)=\int xp(x)dx=\int x\sum_i p(x\vert I=i)P(I=i) dx=\sum_iP(I=i)E(X\vert I=i)$$
 
 We can write $$E(X)=\sum_i P_iE(X_i)$$. By prerequisite 1, $$P_i$$ is easy to compute; by prerequisite 2, the expectation within each stratum is easy to compute. Hence $$E(X)$$ can be evaluated, making this estimator correct and feasible.
 
-> The stratified sampling estimator for Monte Carlo integration is the Estimator $$F$$, where $$E(F(X))=\sum_iP(I=i)E(F(X)|I=i)$$. This relation is based on the same principle as the derivation above. In the following discussion, all results hold if we replace $$X$$ with $$F$$, so we will continue using $$X$$ directly.
+> The stratified sampling estimator for Monte Carlo integration is the Estimator $$F$$, where $$E(F(X))=\sum_iP(I=i)E(F(X)\vert I=i)$$. This relation is based on the same principle as the derivation above. In the following discussion, all results hold if we replace $$X$$ with $$F$$, so we will continue using $$X$$ directly.
 
 ## Conditional Expectation Random Variable
 
-Before proving the optimality of variance, we need to introduce the concept of conditional expectation random variables. Note that for a fixed $$i$$, $$E(X|I=i)$$ is a constant. Thus, for varying $$i\in\{1,\cdots,n\}$$, $$E(X|I=i)$$ forms a new discrete random variable $$\tilde I$$. We can simply write $$\tilde I$$ as $$E(X|I)$$.
+Before proving the optimality of variance, we need to introduce the concept of conditional expectation random variables. Note that for a fixed $$i$$, $$E(X\vert I=i)$$ is a constant. Thus, for varying $$i\in\{1,\cdots,n\}$$, $$E(X\vert I=i)$$ forms a new discrete random variable $$\tilde I$$. We can simply write $$\tilde I$$ as $$E(X\vert I)$$.
 
-**Theorem 1**: For random variables $$X,Y$$ where $$Y$$ is a discrete random variable, $$E(E(X|Y))=E(X)$$.
+**Theorem 1**: For random variables $$X,Y$$ where $$Y$$ is a discrete random variable, $$E(E(X\vert Y))=E(X)$$.
 
-**Proof**: $$E(E(X|Y))= \sum_yP(Y = y)E(X|Y = y)$$, which is exactly the expression from stratified sampling, and therefore equals $$E(X)$$. In other words, stratified sampling is essentially an application of this theorem.
+**Proof**: $$E(E(X\vert Y))= \sum_yP(Y = y)E(X\vert Y = y)$$, which is exactly the expression from stratified sampling, and therefore equals $$E(X)$$. In other words, stratified sampling is essentially an application of this theorem.
 
-**Theorem 2 (Law of Total Variance)**: For random variables $$X,Y$$ where $$Y$$ is a discrete random variable, $$D(X)=E(D(X|Y))+D(E(X|Y))$$.
+**Theorem 2 (Law of Total Variance)**: For random variables $$X,Y$$ where $$Y$$ is a discrete random variable, $$D(X)=E(D(X\vert Y))+D(E(X\vert Y))$$.
 
 **Proof**: First, let's derive the relationship between conditional variance and conditional expectation.
 
 $$
 \begin{aligned}
-D(X|Y=y)&=\int (x-E(X|Y=y))^2p(x|Y=y)dx\\
-&=\int x^2p(x|Y=y)dx+E^2(X|Y=y)\int p(x|Y=y)dx\\
-&\quad-2E(X|Y=y)\int xp(x|Y=y)dx\\
-&=E(X^2|Y=y)+E^2(X|Y=y)-2E^2(X|Y=y)\\
-&=E(X^2|Y=y)-E^2(X|Y=y)
+D(X\vert Y=y)&=\int (x-E(X\vert Y=y))^2p(x\vert Y=y)dx\\
+&=\int x^2p(x\vert Y=y)dx+E^2(X\vert Y=y)\int p(x\vert Y=y)dx\\
+&\quad-2E(X\vert Y=y)\int xp(x\vert Y=y)dx\\
+&=E(X^2\vert Y=y)+E^2(X\vert Y=y)-2E^2(X\vert Y=y)\\
+&=E(X^2\vert Y=y)-E^2(X\vert Y=y)
 \end{aligned}
 $$
 
 The above holds for any value $$y$$, i.e.:
 
-$$D(X|Y)=E(X^2|Y)-E^2(X|Y)$$
+$$D(X\vert Y)=E(X^2\vert Y)-E^2(X\vert Y)$$
 
 Thus:
 
-$$E(D(X|Y))=E(E(X^2|Y))-E(E^2(X|Y))$$
-$$D(E_X(X|Y))=E(E^2(X|Y))-E^2(E(X|Y))$$
+$$E(D(X\vert Y))=E(E(X^2\vert Y))-E(E^2(X\vert Y))$$
+
+$$D(E_X(X\vert Y))=E(E^2(X\vert Y))-E^2(E(X\vert Y))$$
 
 Therefore:
 
-$$E(D(X|Y))+D(E(X|Y))=E(E(X^2|Y))-E^2(E(X|Y))$$
+$$E(D(X\vert Y))+D(E(X\vert Y))=E(E(X^2\vert Y))-E^2(E(X\vert Y))$$
 
-By Theorem 1, $$E(E(X^2|Y))=E(X^2)$$ and $$E(E(X|Y))=E(X)$$, so:
+By Theorem 1, $$E(E(X^2\vert Y))=E(X^2)$$ and $$E(E(X\vert Y))=E(X)$$, so:
 
-$$E(D(X|Y))+D(E(X|Y))=E(X^2)-E^2(X)=D(X)$$
+$$E(D(X\vert Y))+D(E(X\vert Y))=E(X^2)-E^2(X)=D(X)$$
 
 Q.E.D.
 
@@ -98,11 +99,11 @@ Q.E.D.
 
 Therefore the proposition is equivalent to proving $$D(X)\geq \sum_i P_iD(X_i)$$.
 
-By the law of total variance, $$D(X)=E(D(X|I))+D(E(X|I))\geq E(D(X|I))$$, and $$E(D(X|I))$$ is precisely $$\sum_i P_iD(X_i)$$. This completes the proof.
+By the law of total variance, $$D(X)=E(D(X\vert I))+D(E(X\vert I))\geq E(D(X\vert I))$$, and $$E(D(X\vert I))$$ is precisely $$\sum_i P_iD(X_i)$$. This completes the proof.
 
-**Variance invariance condition**: The variance remains unchanged if and only if $$D(E(X|I))=0$$. By the definition of variance for a discrete random variable:
+**Variance invariance condition**: The variance remains unchanged if and only if $$D(E(X\vert I))=0$$. By the definition of variance for a discrete random variable:
 
-$$\frac{1}{n}(E(X|I=i)-E(E(X|I)))^2=\frac{1}{n}(E(X_i)-E(X))^2=0$$
+$$\frac{1}{n}(E(X\vert I=i)-E(E(X\vert I)))^2=\frac{1}{n}(E(X_i)-E(X))^2=0$$
 
 **That is, the variance is unchanged only when all strata have equal means; otherwise, the variance is guaranteed to decrease.** This is why, when the distribution is not well understood, more strata are generally better — this tends to create larger variations in stratum means, whereas fewer strata are more likely to result in similar means.
 
