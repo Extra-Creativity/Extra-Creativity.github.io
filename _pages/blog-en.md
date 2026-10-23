@@ -26,9 +26,7 @@ pagination:
   </div>
 {% endif %}
 
-{% assign has_tags = site.display_tags.size > 0 %}
-{% assign has_cats = site.display_categories.size > 0 %}
-{% if has_tags or has_cats %}
+{% if site.display_tags and site.display_tags.size > 0 or site.display_categories and site.display_categories.size > 0 %}
   <div class="tag-category-list">
     <ul class="p-0 m-0">
       {% for tag in site.display_tags %}
@@ -39,7 +37,7 @@ pagination:
           <p>&bull;</p>
         {% endunless %}
       {% endfor %}
-      {% if has_tags and has_cats %}
+      {% if site.display_categories.size > 0 and site.display_tags.size > 0 %}
         <p>&bull;</p>
       {% endif %}
       {% for category in site.display_categories %}
